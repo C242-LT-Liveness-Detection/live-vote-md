@@ -26,24 +26,31 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.CreateVotingOption
 import com.example.votingapp.presentation.components.DateInput
+import com.example.votingapp.presentation.components.DialWithDialogExample
 import com.example.votingapp.presentation.components.InputTextField
+//import com.example.votingapp.presentation.components.TimePickerInput
 import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 @Composable
@@ -75,11 +82,14 @@ fun TitleDescriptionPage(onNext: () -> Unit) {
     val datePickerState = rememberDatePickerState()
     val calendarShow = remember { mutableStateOf(false) }
 
-    DateInput(
-        calendarShow.value,
-        datePickerState,
-        onOpenDialog = { calendarShow.value = true },
-        onCloseDialog = { calendarShow.value = false })
+    var showTimePicker by remember { mutableStateOf(false) }
+    val stateTimePicker = rememberTimePickerState(
+        is24Hour = true
+    )
+    val formatter = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
+
+    val context = LocalContext.current
+
 
     Column(
         modifier = Modifier
@@ -169,6 +179,9 @@ fun TitleDescriptionPage(onNext: () -> Unit) {
             Box(
                 modifier = Modifier
                     .weight(1f)
+                    .clickable {
+                        showTimePicker = true
+                    }
             ) {
                 Row {
                     Box(
@@ -199,7 +212,7 @@ fun TitleDescriptionPage(onNext: () -> Unit) {
                             .fillMaxWidth(),
                         contentAlignment = Alignment.CenterStart
                     ) {
-                        Text("15/11/2024")
+                        Text("${stateTimePicker.hour}:${stateTimePicker.minute}")
                     }
 
                 }
@@ -216,6 +229,18 @@ fun TitleDescriptionPage(onNext: () -> Unit) {
             onNext()
         }
     }
+    DateInput(
+        calendarShow.value,
+        datePickerState,
+        onOpenDialog = { calendarShow.value = true },
+        onCloseDialog = { calendarShow.value = false })
+    DialWithDialogExample(
+        state = stateTimePicker,
+        show = showTimePicker,
+        onConfirm = { showTimePicker = false },
+        onDismiss = { showTimePicker = false }
+
+    )
 }
 
 @Composable

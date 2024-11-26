@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,4 +60,18 @@ fun DateInput(
                 )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun DateInputPreview() {
+    val datePickerState = rememberDatePickerState()
+    val calendarShow = remember { mutableStateOf(true) }
+
+    DateInput(
+        calendarShow.value,
+        datePickerState,
+        onOpenDialog = { calendarShow.value = true },
+        onCloseDialog = { calendarShow.value = false })
 }
