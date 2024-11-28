@@ -12,8 +12,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.votingapp.core.navigation.Destination
+import com.example.votingapp.core.navigation.navigateToCreateVote
+import com.example.votingapp.core.navigation.navigateToHome
+import com.example.votingapp.core.navigation.navigateToJoinVote
 import com.example.votingapp.core.navigation.navigateToLogin
 import com.example.votingapp.core.navigation.navigateToRegister
+import com.example.votingapp.core.navigation.navigateToWelcome
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -76,8 +80,13 @@ class AppState(
             restoreState = true
         }
         when (destination) {
+            Destination.Welcome -> navController.navigateToWelcome(topLevelNavOptions)
             Destination.REGISTER -> navController.navigateToRegister(topLevelNavOptions)
             Destination.LOGIN -> navController.navigateToLogin(topLevelNavOptions)
+            Destination.Home -> navController.navigateToHome(topLevelNavOptions)
+            Destination.CreateVoting -> navController.navigateToCreateVote(topLevelNavOptions)
+            Destination.JoinVoting -> navController.navigateToJoinVote(topLevelNavOptions)
+            Destination.ChoseVote -> navController.navigateToCreateVote(topLevelNavOptions)
         }
 
     }

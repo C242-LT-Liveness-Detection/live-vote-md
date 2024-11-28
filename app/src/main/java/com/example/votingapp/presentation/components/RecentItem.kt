@@ -53,7 +53,7 @@ fun RecentVotingItem() {
         ) {
             Text(
                 "Voting Title",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleSmall
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(

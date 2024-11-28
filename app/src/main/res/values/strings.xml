@@ -3,4 +3,9 @@
     <string name="label">Label</string>
     <string name="register">Daftar</string>
     <string name="login">Login</string>
+    <string name="home">Home</string>
+    <string name="welcome">Welcome</string>
+    <string name="create_voting">Create Voting</string>
+    <string name="join_voting">Join Voting</string>
+    <string name="chose_vote">Chose Vote\n</string>
 </resources>

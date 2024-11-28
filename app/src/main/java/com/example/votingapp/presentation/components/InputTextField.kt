@@ -101,7 +101,7 @@ fun InputTextField(
     }
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun PreviewOutlinedTextField() {
     AppTheme {
@@ -109,25 +109,6 @@ fun PreviewOutlinedTextField() {
     }
 }
 
-@Preview
-@Composable
-fun PreviewClassicTextField() {
-    AppTheme {
-        InputTextField(text = "Classic", type = InputTextFieldType.Classic) {}
-    }
-}
-
-@Preview
-@Composable
-fun PreviewWithIconTextField() {
-    AppTheme {
-        InputTextField(
-            text = "With Icon",
-            type = InputTextFieldType.WithIcon,
-            icon = Icons.Default.Search
-        ) {}
-    }
-}
 
 enum class InputTextFieldType {
     Classic, Outlined, WithIcon, IconClickable

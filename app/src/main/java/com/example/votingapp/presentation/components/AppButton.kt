@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.votingapp.core.ui.AppTheme
@@ -26,8 +27,9 @@ fun AppButton(
             modifier = modifier.fillMaxWidth(),
             enabled = enabled,
             colors = ButtonDefaults.buttonColors(
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContentColor = MaterialTheme.colorScheme.onSurface,
+                containerColor = MaterialTheme.colorScheme.primary,
+                disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                disabledContentColor = Color.White.copy(alpha = 0.5f),
             ),
             shape = shape
 
@@ -93,7 +95,7 @@ fun PreviewTextButton() {
 @Composable
 fun PreviewAppButton() {
     AppTheme {
-        AppButton(text = "Text") {}
+        AppButton(text = "Mantap") {}
     }
 }
 

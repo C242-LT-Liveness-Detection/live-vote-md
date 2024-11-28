@@ -26,7 +26,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
@@ -34,7 +33,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,13 +46,17 @@ import com.example.votingapp.presentation.components.CreateVotingOption
 import com.example.votingapp.presentation.components.DateInput
 import com.example.votingapp.presentation.components.DialWithDialogExample
 import com.example.votingapp.presentation.components.InputTextField
-//import com.example.votingapp.presentation.components.TimePickerInput
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
 @Composable
-fun CreateVotingScreen() {
+fun CreateVoteRoute() {
+    CreateVoteScreen()
+}
+
+@Composable
+fun CreateVoteScreen() {
     var showVoteCreation by remember { mutableStateOf(false) }
 
     // Animasi transisi antar halaman
@@ -296,8 +298,8 @@ fun CreateVotePage(onBack: () -> Unit) {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun CreateVotingScreenPreview() {
+fun CreateVoteScreenPreview() {
     AppTheme {
-        CreateVotingScreen()
+        CreateVoteScreen()
     }
 }

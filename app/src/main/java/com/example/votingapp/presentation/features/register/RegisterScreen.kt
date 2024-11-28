@@ -24,9 +24,11 @@ import androidx.compose.ui.unit.dp
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.InputTextField
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.votingapp.R
+import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.presentation.components.InputPassword
 
 @Composable
@@ -150,3 +152,17 @@ fun LoginText(onRegisterClick: () -> Unit) {
 
 }
 
+
+@Preview(showSystemUi = true)
+@Composable
+fun RegisterScreenPreview() {
+    AppTheme {
+        RegisterScreen(
+            registerUiInfo = RegisterUiInfo(
+                email = "",
+                password = "",
+                name = ""
+            ),
+        )
+    }
+}

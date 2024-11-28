@@ -22,6 +22,13 @@ enum class Destination(
     val route: String
 ) {
 
+    Welcome(
+        isTopLevelDestination = true,
+        isBottomBarTab = false,
+        isTopBarTab = false,
+        titleTextId = R.string.welcome,
+        route = welcomeNavigationRoute
+    ),
 
     REGISTER(
         isTopLevelDestination = true,
@@ -37,7 +44,39 @@ enum class Destination(
         isTopBarTab = false,
         titleTextId = R.string.login,
         route = loginNavigationRoute
-    );
+    ),
 
+    Home(
+        isTopLevelDestination = true,
+        isBottomBarTab = false,
+        isTopBarTab = false,
+        titleTextId = R.string.home,
+        route = homeNavigationRoute
+
+    ),
+
+    CreateVoting(
+        isTopLevelDestination = true,
+        isBottomBarTab = false,
+        isTopBarTab = false,
+        titleTextId = R.string.create_voting,
+        route = createVoteNavigationRoute
+    ),
+
+    JoinVoting(
+        isTopLevelDestination = true,
+        isBottomBarTab = false,
+        isTopBarTab = false,
+        titleTextId = R.string.join_voting,
+        route = joinVoteNavigationRoute
+    ),
+
+    ChoseVote(
+        isTopLevelDestination = true,
+        isBottomBarTab = false,
+        isTopBarTab = false,
+        titleTextId = R.string.chose_vote,
+        route = choseVoteNavigationRoute
+    )
 
 }

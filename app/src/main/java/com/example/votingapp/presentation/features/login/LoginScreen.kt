@@ -21,10 +21,12 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.votingapp.R
+import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.InputPassword
 import com.example.votingapp.presentation.components.InputTextField
@@ -32,7 +34,8 @@ import com.example.votingapp.presentation.components.InputTextField
 @Composable
 internal fun LoginRoute(
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
+    navigateToHome: () -> Unit
 ) {
     val errorMessages = viewModel.errorMessages.value
     val registerUiInfo = viewModel.loginUiInfo.collectAsStateWithLifecycle().value
@@ -47,8 +50,8 @@ internal fun LoginRoute(
         viewModel::onPasswordChanged,
         viewModel.loading.value,
         viewModel::clearErrorMessages,
-        viewModel.successMessage.value
-
+        viewModel.successMessage.value,
+        navigateToHome = navigateToHome
     )
 }
 
@@ -65,6 +68,7 @@ fun LoginScreen(
     loading: Boolean = false,
     clearErrorMessages: () -> Unit = {},
     successMessage: String? = null,
+    navigateToHome: () -> Unit = {},
 
 
     ) {
@@ -107,9 +111,9 @@ fun LoginScreen(
         }
 
         Spacer(modifier = Modifier.height(10.dp))
-        AppButton(text = stringResource(R.string.register), enabled = loading.not()) {
-            Log.d("RegisterViewModel", "register: halo")
-            login()
+        AppButton(text = stringResource(R.string.login), enabled = loading.not()) {
+            navigateToHome()
+//            login()
 
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -122,10 +126,10 @@ fun LoginScreen(
 @Composable
 fun LoginText(onRegisterClick: () -> Unit) {
     val annotatedString = buildAnnotatedString {
-        append("Sudah punya akun? ")
+        append("Belum punya akun? ")
         withLink(
             link = LinkAnnotation.Clickable(
-                tag = "login",
+                tag = "register",
                 linkInteractionListener = { offset ->
                     onRegisterClick()
                 },
@@ -137,7 +141,7 @@ fun LoginText(onRegisterClick: () -> Unit) {
                 )
             )
         ) {
-            append("Masuk")
+            append("Daftar")
         }
     }
 
@@ -145,3 +149,17 @@ fun LoginText(onRegisterClick: () -> Unit) {
 
 }
 
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun LoginScreenPreview() {
+    AppTheme {
+        LoginScreen(
+            loginUiInfo = LoginUiInfo(
+                email = "",
+                password = ""
+            ),
+
+            )
+    }
+}
