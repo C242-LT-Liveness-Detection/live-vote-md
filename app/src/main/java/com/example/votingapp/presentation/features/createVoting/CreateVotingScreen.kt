@@ -285,10 +285,10 @@ fun CreateVotePage(onBack: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        Spacer(Modifier.weight(1f))
 
-        // Back button
-        Button(onClick = onBack) {
-            Text(text = "Kembali")
+        AppButton(text = "Buat") {
+
         }
     }
 
