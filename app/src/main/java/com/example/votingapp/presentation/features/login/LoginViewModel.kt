@@ -20,7 +20,7 @@ class LoginViewModel @Inject constructor(
 
     val loginUiInfo by lazy {
         MutableStateFlow(
-            LoginUiInfo("email@gmail.com", "qwerty123")
+            LoginUiInfo("", "")
         )
     }
 

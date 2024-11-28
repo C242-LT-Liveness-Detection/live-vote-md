@@ -12,7 +12,7 @@ fun AppNavHost(
     navController: NavHostController,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    startDestination: String = homeNavigationRoute
+    startDestination: String = welcomeNavigationRoute
 ) {
     Log.d("AppNavHost", "Start destination: $startDestination")
     NavHost(
