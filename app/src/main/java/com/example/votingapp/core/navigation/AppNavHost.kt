@@ -12,9 +12,10 @@ fun AppNavHost(
     navController: NavHostController,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    startDestination: String = welcomeNavigationRoute
+    startDestination: String = homeNavigationRoute
 ) {
-    Log.d("AppNavHost", "Start destination: $startDestination")
+
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -34,7 +35,12 @@ fun AppNavHost(
             },
             navigateToJoinVoting = {
                 navController.navigate(joinVoteNavigationRoute)
+            },
+
+            navigateToLogin = {
+                navController.navigate(loginNavigationRoute)
             }
+
         )
         createVoteScreen()
         joinVoteScreen(

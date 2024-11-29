@@ -20,7 +20,8 @@ import com.example.votingapp.core.navigation.Destination
 )
 @Composable
 fun AndroidTemplateApp(
-    appState: AppState
+    appState: AppState,
+    startDestination: String
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -43,6 +44,7 @@ fun AndroidTemplateApp(
         ) { padding ->
 
         AppNavHost(
+            startDestination = startDestination,
             navController = appState.navController,
             onBackClick = appState::onBackClick,
             modifier = Modifier

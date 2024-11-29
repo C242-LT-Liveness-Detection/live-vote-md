@@ -18,11 +18,13 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,27 +39,36 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.votingapp.R
 import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.presentation.components.RecentVotingItem
 
 @Composable
-fun HomeRoute(
+internal fun HomeRoute(
     navigateToCreateVoting: () -> Unit,
-    navigateToJoinVoting: () -> Unit
+    navigateToJoinVoting: () -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToLogin: () -> Unit
 ) {
     HomeScreen(
+        viewModel = viewModel,
         onCreateVotingClick = navigateToCreateVoting,
-        onJoinVotingClick = navigateToJoinVoting
+        onJoinVotingClick = navigateToJoinVoting,
+        navigateToLogin = navigateToLogin
     )
 }
 
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel,
     onCreateVotingClick: () -> Unit,
-    onJoinVotingClick: () -> Unit
+    onJoinVotingClick: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
+    val dialogConfirmLogout = remember { mutableStateOf(false) }
+
     ConstraintLayout() {
         val (topImg) = createRefs()
 
@@ -102,8 +113,9 @@ fun HomeScreen(
                     Text(
                         text = "Hello, User!",
                         style = MaterialTheme.typography.headlineSmall,
-                        color = Color.White
-                    )
+                        color = Color.White,
+
+                        )
 
                     Box(
                         modifier = Modifier
@@ -136,7 +148,10 @@ fun HomeScreen(
                                 text = { Text("Pengaturan") }
                             )
                             DropdownMenuItem(
-                                onClick = {},
+                                onClick = {
+                                    dialogConfirmLogout.value = true
+
+                                },
                                 text = { Text("Keluar") }
                             )
 
@@ -193,8 +208,52 @@ fun HomeScreen(
         }
 
     }
+    if (dialogConfirmLogout.value) {
+        LogoutDialog(
+            onDismiss = {
+                dialogConfirmLogout.value = false
+            },
+            onConfirm = {
+                dialogConfirmLogout.value = false
+                navigateToLogin()
+            }
+        )
+    }
 
+}
 
+@Composable
+fun LogoutDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text("Logout")
+        },
+        text = {
+            Text("Are you sure want to logout?")
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirm()
+                }
+            ) {
+                Text("Yes")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismiss()
+                }
+            ) {
+                Text("No")
+            }
+        }
+    )
 }
 
 
@@ -238,13 +297,3 @@ fun CardFeature(
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-fun HomeScreenPreview() {
-    AppTheme {
-        HomeScreen(
-            onCreateVotingClick = {},
-            onJoinVotingClick = {}
-        )
-    }
-}

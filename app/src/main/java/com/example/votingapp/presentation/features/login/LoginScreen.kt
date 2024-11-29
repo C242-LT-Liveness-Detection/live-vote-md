@@ -1,6 +1,5 @@
 package com.example.votingapp.presentation.features.login
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -112,8 +111,8 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
         AppButton(text = stringResource(R.string.login), enabled = loading.not()) {
+            login()
             navigateToHome()
-//            login()
 
         }
         Spacer(modifier = Modifier.height(10.dp))

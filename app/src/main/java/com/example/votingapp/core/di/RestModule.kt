@@ -2,11 +2,15 @@ package com.example.votingapp.core.di
 
 import com.example.votingapp.BuildConfig
 import com.example.votingapp.data.resource.remote.retrofit.ApiService
+import com.example.votingapp.data.storage.UserPreferenceStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,12 +24,24 @@ class RestModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient {
+    fun provideHttpClient(userPreferenceStore: UserPreferenceStore): OkHttpClient {
+        val token = runBlocking { userPreferenceStore.accessToken.first() }
+        val authInterceptor = Interceptor { chain ->
+            val req = chain.request()
+            val requestHeaders = req.newBuilder()
+                .addHeader(
+                    "Authorization",
+                    "Bearer $token"
+                )
+                .build()
+            chain.proceed(requestHeaders)
+        }
+
         val clientBuilder = OkHttpClient.Builder()
             .connectTimeout(45, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-
+            .addInterceptor(authInterceptor)
         if (BuildConfig.DEBUG) {
             val logging = HttpLoggingInterceptor()
             logging.level = HttpLoggingInterceptor.Level.BODY
