@@ -14,12 +14,14 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.homeScreen(
     navigateToCreateVoting: () -> Unit,
-    navigateToJoinVoting: () -> Unit
+    navigateToJoinVoting: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     composable(route = homeNavigationRoute) {
         HomeRoute(
             navigateToCreateVoting = navigateToCreateVoting,
-            navigateToJoinVoting = navigateToJoinVoting
+            navigateToJoinVoting = navigateToJoinVoting,
+            navigateToLogin = navigateToLogin
         )
     }
 }

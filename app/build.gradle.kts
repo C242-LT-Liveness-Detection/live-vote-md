@@ -22,7 +22,7 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "BASE_URL", "\"http://34.50.75.24/\"")
+        buildConfigField("String", "BASE_URL", "\"http://34.101.204.142/\"")
 
     }
 
@@ -92,5 +92,6 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class:1.3.1")
 
     implementation(libs.lottie.compose)
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0")
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.datastore.preferences)
 }

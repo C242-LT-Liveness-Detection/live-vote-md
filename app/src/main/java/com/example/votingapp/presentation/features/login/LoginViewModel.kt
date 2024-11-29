@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.votingapp.data.repositories.UserRepository
+import com.example.votingapp.data.resource.remote.response.error.LoginError
 import com.example.votingapp.data.resource.remote.response.error.RegisterError
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,7 @@ class LoginViewModel @Inject constructor(
 
     val loginUiInfo by lazy {
         MutableStateFlow(
-            LoginUiInfo("", "")
+            LoginUiInfo("email@gmail.com", "qwerty123")
         )
     }
 
@@ -38,12 +39,13 @@ class LoginViewModel @Inject constructor(
                     loginUiInfo.value.email,
                     loginUiInfo.value.password
                 )
+                userRepository.saveAccessToken(response.accessToken)
                 successMessage.value = response.message
             } catch (e: HttpException) {
                 val jsonInString = e.response()?.errorBody()?.string()
-                val errorBody = Gson().fromJson(jsonInString, RegisterError::class.java)
+                val errorBody = Gson().fromJson(jsonInString, LoginError::class.java)
                 Log.d("RegisterViewModel", "register: ${e}")
-                errorMessages.value = errorBody.message
+                errorMessages.value = "ada yang error"
             } catch (e: Exception) {
                 errorMessages.value = "An error occurred"
                 Log.d("RegisterViewModel", "register: ${e.message}")
