@@ -28,7 +28,8 @@ fun AndroidTemplateApp(
         modifier = Modifier.semantics {
             testTagsAsResourceId = true
         },
-        containerColor = Color.Transparent,
+
+        containerColor = Color(0xFFF7F7F7),
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = {
