@@ -31,7 +31,7 @@ import com.example.votingapp.core.ui.AppTheme
 fun CreateVotingOption(
     value: String = "",
     onValueChange: (String) -> Unit,
-    onDelete: () -> Unit
+//    onDelete: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -44,18 +44,18 @@ fun CreateVotingOption(
             onValueChange = onValueChange
         )
 
-        IconButton(
-            onClick = onDelete
-        ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete",
-                tint = Color(0xFFef4444),
-                modifier = Modifier
-                    .size(24.dp)
-                    .weight(0.1f)
-            )
-        }
+//        IconButton(
+//            onClick = onDelete
+//        ) {
+//            Icon(
+//                imageVector = Icons.Default.Delete,
+//                contentDescription = "Delete",
+//                tint = Color(0xFFef4444),
+//                modifier = Modifier
+//                    .size(24.dp)
+//                    .weight(0.1f)
+//            )
+//        }
 
 
     }
