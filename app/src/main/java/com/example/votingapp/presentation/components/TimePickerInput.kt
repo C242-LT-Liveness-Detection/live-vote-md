@@ -20,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -64,6 +65,7 @@ fun DialWithDialogExample(
 
     if (show) {
         AlertDialog(
+            containerColor = Color.White,
             onDismissRequest = onDismiss,
             dismissButton = {
                 TextButton(onClick = { onDismiss() }) {
