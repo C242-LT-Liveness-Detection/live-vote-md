@@ -18,9 +18,9 @@ fun NavGraphBuilder.joinVoteScreen(
 ) {
     composable(route = joinVoteNavigationRoute) {
         JoinVotingRoute(
-            onJoin = {
-                navigateToChoseVoting()
-            }
+//            onJoin = {
+//                navigateToChoseVoting()
+//            }
         )
     }
 }

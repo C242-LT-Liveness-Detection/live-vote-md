@@ -1,6 +1,7 @@
 package com.example.votingapp.data.repositories
 
 import com.example.votingapp.data.resource.remote.request.CreateVoteRequest
+import com.example.votingapp.data.resource.remote.request.JoinVoteRequest
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponseItem
 import com.example.votingapp.data.resource.remote.retrofit.ApiService
 import com.example.votingapp.data.storage.UserPreferenceStore
@@ -32,6 +33,13 @@ class VoteRepository @Inject constructor(
         apiService.createVote(
             request
         )
+    }
+
+    suspend fun joinVote(code: String) {
+        val request = JoinVoteRequest(
+            code = code
+        )
+        apiService.joinVote(request)
     }
 
 }

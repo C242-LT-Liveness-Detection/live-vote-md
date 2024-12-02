@@ -9,6 +9,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.votingapp.core.navigation.choseVoteNavigationRoute
 import com.example.votingapp.core.navigation.homeNavigationRoute
 import com.example.votingapp.core.navigation.welcomeNavigationRoute
 import com.example.votingapp.core.ui.AppTheme
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 AndroidTemplateApp(
-                    startDestination = startDestination,
+                    startDestination = choseVoteNavigationRoute,
                     appState = rememberAppState(
                         windowSizeClass = calculateWindowSizeClass(this)
                     ),

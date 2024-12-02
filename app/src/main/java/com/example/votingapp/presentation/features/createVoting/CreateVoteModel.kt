@@ -107,7 +107,7 @@ class CreateVoteModel @Inject constructor(
         viewModelScope.launch {
             val endDate =
                 "${SimpleDateFormat("dd/MM/yyyy").format(createVoteUiInfo.value.endDate)}:${createVoteUiInfo.value.endTime}"
-//      string to iso
+
             val endDateIso = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(
                 SimpleDateFormat("dd/MM/yyyy:HH:mm").parse(endDate)
             )

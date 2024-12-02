@@ -1,8 +1,6 @@
 package com.example.votingapp.presentation.features.choseVote
 
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,15 +9,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -124,35 +118,6 @@ fun ChoseVoteScreen() {
 }
 
 
-//        Column(
-//            modifier = Modifier
-//                .shadow(elevation = 16.dp)
-//                .background(
-//                    Color.Red,
-//                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-//                )
-//                .fillMaxWidth()
-//                .padding(16.dp)
-//
-//                .constrainAs(content) {
-//                    top.linkTo(bgTop.bottom, margin = (-50).dp)
-//                    start.linkTo(parent.start)
-//                    end.linkTo(parent.end)
-//                }
-//        ) {
-//            LazyColumn(
-//                verticalArrangement = Arrangement.spacedBy(8.dp)
-//            ) {
-//
-//                items(4) {
-//                    VoteItem("Telur")
-//                }
-//            }
-//
-//        }
-//    }
-//}
-
 @Composable
 fun VoteItem(
     text: String
@@ -198,11 +163,3 @@ fun VoteItem(
 }
 
 
-@Composable
-@Preview(showSystemUi = true)
-fun ChoseVoteScreenPreview() {
-    AppTheme {
-        ChoseVoteScreen()
-
-    }
-}
