@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.votingapp.core.navigation.choseVoteNavigationRoute
 import com.example.votingapp.core.navigation.homeNavigationRoute
+import com.example.votingapp.core.navigation.joinVoteNavigationRoute
 import com.example.votingapp.core.navigation.welcomeNavigationRoute
 import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.core.ui.AndroidTemplateApp
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 AndroidTemplateApp(
-                    startDestination = choseVoteNavigationRoute,
+                    startDestination = startDestination,
                     appState = rememberAppState(
                         windowSizeClass = calculateWindowSizeClass(this)
                     ),

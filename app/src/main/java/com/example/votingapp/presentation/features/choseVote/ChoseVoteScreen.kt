@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,22 +32,44 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.example.votingapp.core.ui.AppTheme
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.votingapp.data.resource.remote.response.success.VoteByCodeResponse
 import com.example.votingapp.presentation.components.AppButton
 
 @Composable
 fun ChoseVoteRoute(
+    voteCode: String,
+    viewModel: ChoseVoteViewModel = hiltViewModel(),
 ) {
-    ChoseVoteScreen()
+
+    viewModel.getVoteByCode(voteCode)
+    ChoseVoteScreen(
+        loading = viewModel.loading.value,
+        vote = viewModel.vote.value
+    )
 }
 
 @Composable
-fun ChoseVoteScreen() {
+fun ChoseVoteScreen(
+    loading: Boolean,
+    vote: VoteByCodeResponse? = null
+) {
+
+    if (loading || vote == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+
+        return
+    }
+
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize() // Mengisi seluruh layar
+        modifier = Modifier.fillMaxSize()
     ) {
         val (bgTop, content) = createRefs()
 
@@ -71,7 +94,7 @@ fun ChoseVoteScreen() {
                 .padding(top = 50.dp, start = 16.dp)
         ) {
             Text(
-                "Lebih Dulu Telur Atau Ayam?",
+                vote.question,
                 style = MaterialTheme.typography.titleLarge.copy(
                     brush = Brush.linearGradient(
                         colors = listOf(
@@ -107,8 +130,8 @@ fun ChoseVoteScreen() {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
-                items(4) {
-                    VoteItem("Telur")
+                items(vote.options.size) { index ->
+                    VoteItem(vote.options[index].optionText)
                 }
             }
             Spacer(modifier = Modifier.weight(1f))

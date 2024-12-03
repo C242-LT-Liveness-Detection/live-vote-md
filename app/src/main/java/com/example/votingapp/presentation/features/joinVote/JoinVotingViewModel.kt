@@ -9,6 +9,7 @@ import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import retrofit2.HttpException
 import javax.inject.Inject
 
 
@@ -17,15 +18,21 @@ class JoinVotingViewModel @Inject constructor(
     private val voteRepository: VoteRepository
 ) : ViewModel() {
 
-    val code = mutableStateOf("")
+    val code = mutableStateOf("KA91G")
+    val errorMessage = mutableStateOf<String?>(null)
+    val successMessage = mutableStateOf<String?>(null)
 
     private fun joinVote() {
         viewModelScope.launch {
             try {
 
-                voteRepository.joinVote(code = code.value)
-            } catch (e: Exception) {
-                Log.e("JoinVotingViewModel", "joinVote: ${e.message}")
+                val response = voteRepository.joinVote(code = code.value)
+                successMessage.value = "Yeay, Berhasil"
+            } catch (e: HttpException) {
+                if (e.code() == 404) {
+                    errorMessage.value = "Ups, Kode yang anda masukkan salah"
+                }
+                Log.e("JoinVotingViewModel", "joinVote: ${e.message()}")
             }
         }
     }
@@ -39,6 +46,14 @@ class JoinVotingViewModel @Inject constructor(
             is JoinVoteEvent.JoinVote -> {
                 joinVote()
             }
+
+            is JoinVoteEvent.ClearError -> {
+                errorMessage.value = null
+            }
+
+            is JoinVoteEvent.ClearSuccess -> {
+                successMessage.value = null
+            }
         }
     }
 
@@ -48,4 +63,7 @@ class JoinVotingViewModel @Inject constructor(
 sealed interface JoinVoteEvent {
     data class InputOnChanged(val code: String) : JoinVoteEvent
     data object JoinVote : JoinVoteEvent
+    data object ClearError : JoinVoteEvent
+    data object ClearSuccess : JoinVoteEvent
+
 }

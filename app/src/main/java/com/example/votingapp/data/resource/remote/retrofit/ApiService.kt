@@ -3,10 +3,12 @@ package com.example.votingapp.data.resource.remote.retrofit
 import com.example.votingapp.data.resource.remote.request.CreateVoteRequest
 import com.example.votingapp.data.resource.remote.request.JoinVoteRequest
 import com.example.votingapp.data.resource.remote.request.RegisterRequest
+import com.example.votingapp.data.resource.remote.response.success.JoinVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponseItem
 import com.example.votingapp.data.resource.remote.response.success.LoginResponse
 import com.example.votingapp.data.resource.remote.response.success.RegisterResponse
+import com.example.votingapp.data.resource.remote.response.success.VoteByCodeResponse
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -14,6 +16,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -44,5 +47,10 @@ interface ApiService {
     @POST("events/join")
     suspend fun joinVote(
         @Body body: JoinVoteRequest
-    )
+    ): JoinVoteResponse
+
+    @GET("events/{code}")
+    suspend fun getVoteByCode(
+        @Path("code") code: String
+    ): VoteByCodeResponse
 }

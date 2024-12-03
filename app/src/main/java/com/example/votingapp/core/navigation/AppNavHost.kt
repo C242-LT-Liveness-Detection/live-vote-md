@@ -44,9 +44,7 @@ fun AppNavHost(
         )
         createVoteScreen()
         joinVoteScreen(
-            navigateToChoseVoting = {
-                navController.navigate(choseVoteNavigationRoute)
-            }
+            navController = navController
         )
         choseVoteScreen()
         welcomeScreen(
