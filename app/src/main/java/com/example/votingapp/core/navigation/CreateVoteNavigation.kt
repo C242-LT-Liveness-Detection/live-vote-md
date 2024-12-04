@@ -13,9 +13,13 @@ fun NavController.navigateToCreateVote(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.createVoteScreen(
+    navController: NavController
 
 ) {
     composable(route = createVoteNavigationRoute) {
-        CreateVoteRoute()
+        CreateVoteRoute(
+            navController = navController
+
+        )
     }
 }

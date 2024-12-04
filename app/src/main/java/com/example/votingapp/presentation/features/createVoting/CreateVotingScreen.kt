@@ -46,36 +46,49 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import com.example.votingapp.core.navigation.navigateToChoseVote
+import com.example.votingapp.core.navigation.navigateToHome
 import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.CreateVotingOption
 import com.example.votingapp.presentation.components.DateInput
 import com.example.votingapp.presentation.components.DialWithDialogExample
+import com.example.votingapp.presentation.components.DialogMessage
+import com.example.votingapp.presentation.components.DialogType
 import com.example.votingapp.presentation.components.InputTextField
+import com.example.votingapp.presentation.features.joinVote.JoinVoteEvent
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
 @Composable
 fun CreateVoteRoute(
+    navController: NavController,
     viewModel: CreateVoteModel = hiltViewModel()
 ) {
     val createVoteUiInfo = viewModel.createVoteUiInfo.collectAsStateWithLifecycle().value
     CreateVoteScreen(
+        navController = navController,
         createVoteUiInfo = createVoteUiInfo,
         calendarShow = viewModel.showCalendar.collectAsStateWithLifecycle().value,
         timePickerShow = viewModel.showTimePicker.collectAsStateWithLifecycle().value,
-        onEvent = { viewModel.onEvent(it) }
+        onEvent = { viewModel.onEvent(it) },
+        successMessage = viewModel.successMessage.collectAsStateWithLifecycle().value,
+        errorMessage = viewModel.errorMessage.collectAsStateWithLifecycle().value
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateVoteScreen(
+    navController: NavController,
     createVoteUiInfo: CreateVoteUiInfo,
     calendarShow: Boolean,
     timePickerShow: Boolean,
-    onEvent: (CreateVoteEvent) -> Unit
+    onEvent: (CreateVoteEvent) -> Unit,
+    successMessage: String? = null,
+    errorMessage: String? = null
 ) {
     var showVoteCreation by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
@@ -85,6 +98,33 @@ fun CreateVoteScreen(
         is24Hour = true
     )
 
+    successMessage?.let {
+        DialogMessage(
+            message = it,
+            confirmButton = {
+                TextButton({
+                    onEvent(CreateVoteEvent.ClearSuccess)
+                    navController.navigateToHome()
+                }) {
+                    Text("Oke")
+                }
+            },
+        )
+    }
+
+    errorMessage?.let {
+        DialogMessage(
+            dialogType = DialogType.ERROR,
+            message = it,
+            confirmButton = {
+                TextButton({
+                    onEvent(CreateVoteEvent.ClearError)
+                }) {
+                    Text("Oke")
+                }
+            },
+        )
+    }
     // Animasi transisi antar halaman
     AnimatedContent(
         targetState = showVoteCreation,

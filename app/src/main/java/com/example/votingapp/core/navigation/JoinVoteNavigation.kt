@@ -14,13 +14,11 @@ fun NavController.navigateToJoinVote(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.joinVoteScreen(
-    navigateToChoseVoting: () -> Unit
+    navController: NavController
 ) {
     composable(route = joinVoteNavigationRoute) {
         JoinVotingRoute(
-            onJoin = {
-                navigateToChoseVoting()
-            }
+            navController = navController
         )
     }
 }
