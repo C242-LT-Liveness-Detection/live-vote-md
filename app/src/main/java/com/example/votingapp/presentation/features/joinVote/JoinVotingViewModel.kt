@@ -18,7 +18,7 @@ class JoinVotingViewModel @Inject constructor(
     private val voteRepository: VoteRepository
 ) : ViewModel() {
 
-    val code = mutableStateOf("KA91G")
+    val code = mutableStateOf("")
     val errorMessage = mutableStateOf<String?>(null)
     val successMessage = mutableStateOf<String?>(null)
 

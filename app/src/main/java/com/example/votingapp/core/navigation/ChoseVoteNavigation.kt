@@ -16,23 +16,18 @@ fun NavController.navigateToChoseVote(voteCode: String, navOptions: NavOptions? 
 }
 
 
-//fun NavGraphBuilder.choseVoteScreen() {
-//    composable(
-//        route = "$choseVoteNavigationRoute/${voteCodeArg}",
-//        arguments = listOf(navArgument(voteCodeArg) { type = NavType.StringType })
-//    )
-//    { backStackEntry ->
-//        val voteCode = backStackEntry.arguments?.getString(voteCodeArg) ?: ""
-//        ChoseVoteRoute(voteCode)
-//    }
-//}
+fun NavGraphBuilder.choseVoteScreen(
+    navController: NavController
 
-fun NavGraphBuilder.choseVoteScreen() {
+) {
     composable(
         route = "$choseVoteNavigationRoute/{$voteCodeArg}",
         arguments = listOf(navArgument(voteCodeArg) { type = NavType.StringType })
     ) { backStackEntry ->
         val voteCode = backStackEntry.arguments?.getString(voteCodeArg) ?: ""
-        ChoseVoteRoute(voteCode)
+        ChoseVoteRoute(
+            navController = navController,
+            voteCode
+        )
     }
 }

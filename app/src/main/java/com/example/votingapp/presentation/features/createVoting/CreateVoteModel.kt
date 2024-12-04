@@ -9,6 +9,7 @@ import com.example.votingapp.data.repositories.VoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -33,6 +34,9 @@ class CreateVoteModel @Inject constructor(
 
     val showCalendar = MutableStateFlow(false)
     val showTimePicker = MutableStateFlow(false)
+
+    val successMessage = MutableStateFlow<String?>(null)
+    val errorMessage = MutableStateFlow<String?>(null)
 
     fun onEvent(event: CreateVoteEvent) {
         when (event) {
@@ -62,6 +66,14 @@ class CreateVoteModel @Inject constructor(
 
             is CreateVoteEvent.CreateVote -> {
                 createVote()
+            }
+
+            is CreateVoteEvent.ClearError -> {
+                errorMessage.value = null
+            }
+
+            is CreateVoteEvent.ClearSuccess -> {
+                successMessage.value = null
             }
 
         }
@@ -111,13 +123,24 @@ class CreateVoteModel @Inject constructor(
             val endDateIso = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(
                 SimpleDateFormat("dd/MM/yyyy:HH:mm").parse(endDate)
             )
-            voteRepository.createVote(
-                title = createVoteUiInfo.value.title,
-                question = createVoteUiInfo.value.question,
-                options = createVoteUiInfo.value.options,
-                isMultipleChoice = createVoteUiInfo.value.allowMultipleSelection,
-                endDate = endDateIso,
-            )
+            try {
+                val response = voteRepository.createVote(
+                    title = createVoteUiInfo.value.title,
+                    question = createVoteUiInfo.value.question,
+                    options = createVoteUiInfo.value.options,
+                    isMultipleChoice = createVoteUiInfo.value.allowMultipleSelection,
+                    endDate = endDateIso,
+                )
+                successMessage.value = "Yeay, Berhasil"
+            } catch (e: Exception) {
+                errorMessage.value = e.message
+                Log.e("CreateVoteModel", "createVote: ${e.message}")
+
+            } catch (e: HttpException) {
+                errorMessage.value = e.message()
+                Log.e("CreateVoteModel", "createVote: ${e.message}")
+
+            }
         }
 
     }
@@ -141,5 +164,8 @@ sealed interface CreateVoteEvent {
     data class ToggleTimePicker(val show: Boolean) : CreateVoteEvent
     data class OptionOnChage(val value: String, val index: Int) : CreateVoteEvent
     data object CreateVote : CreateVoteEvent
+
+    data object ClearError : CreateVoteEvent
+    data object ClearSuccess : CreateVoteEvent
 
 }

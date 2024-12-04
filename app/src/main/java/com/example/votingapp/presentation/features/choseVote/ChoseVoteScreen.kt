@@ -19,12 +19,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -35,27 +33,72 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.votingapp.core.navigation.navigateToHome
 import com.example.votingapp.data.resource.remote.response.success.VoteByCodeResponse
 import com.example.votingapp.presentation.components.AppButton
+import com.example.votingapp.presentation.components.DialogMessage
+import com.example.votingapp.presentation.components.DialogType
 
 @Composable
 fun ChoseVoteRoute(
+    navController: NavController,
     voteCode: String,
     viewModel: ChoseVoteViewModel = hiltViewModel(),
 ) {
+    LaunchedEffect(voteCode) {
+        viewModel.getVoteByCode(voteCode)
+    }
 
-    viewModel.getVoteByCode(voteCode)
     ChoseVoteScreen(
+        navController,
+        onEvent = { viewModel.onEvent(it) },
         loading = viewModel.loading.value,
-        vote = viewModel.vote.value
+        vote = viewModel.vote.value,
+        selectedOption = viewModel.selectedOption.value,
+        successMessage = viewModel.successMessage.value,
+        errorMessages = viewModel.errorMessages.value
     )
 }
 
 @Composable
 fun ChoseVoteScreen(
+    navController: NavController,
+    onEvent: (ChoseVoteEvent) -> Unit,
     loading: Boolean,
-    vote: VoteByCodeResponse? = null
+    vote: VoteByCodeResponse? = null,
+    selectedOption: List<Int>,
+    successMessage: String? = null,
+    errorMessages: String? = null
 ) {
+
+    successMessage?.let {
+        DialogMessage(
+            message = it,
+            confirmButton = {
+                TextButton({
+                    onEvent(ChoseVoteEvent.ClearSuccess)
+                    navController.navigateToHome()
+                }) {
+                    Text("Oke")
+                }
+            },
+        )
+    }
+
+    errorMessages?.let {
+        DialogMessage(
+            dialogType = DialogType.ERROR,
+            message = it,
+            confirmButton = {
+                TextButton({
+                    onEvent(ChoseVoteEvent.ClearError)
+                }) {
+                    Text("Oke")
+                }
+            },
+        )
+    }
 
     if (loading || vote == null) {
         Box(
@@ -131,11 +174,24 @@ fun ChoseVoteScreen(
             ) {
 
                 items(vote.options.size) { index ->
-                    VoteItem(vote.options[index].optionText)
+                    val selected = selectedOption.contains(index)
+                    VoteItem(
+                        vote.options[index].optionText,
+                        isSelected = selected,
+                        onClick = {
+                            if (selected) {
+                                onEvent(ChoseVoteEvent.RemoveOption(index))
+                            } else {
+                                onEvent(ChoseVoteEvent.SelectOption(index))
+                            }
+                        }
+                    )
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            AppButton("Lanjut") { }
+            AppButton("Lanjut") {
+                onEvent(ChoseVoteEvent.SubmitVote(vote.uniqueCode))
+            }
         }
     }
 }
@@ -143,9 +199,10 @@ fun ChoseVoteScreen(
 
 @Composable
 fun VoteItem(
-    text: String
+    text: String,
+    isSelected: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
-    var isSelected by remember { mutableStateOf(false) }
     val color = remember { Animatable(Color.Transparent) }
     val primaryColor = MaterialTheme.colorScheme.primary
 
@@ -154,7 +211,7 @@ fun VoteItem(
             .height(50.dp)
             .fillMaxWidth()
             .clickable {
-                isSelected = !isSelected
+                onClick()
             }
             .border(
                 1.dp,

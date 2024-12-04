@@ -3,6 +3,7 @@ package com.example.votingapp.data.resource.remote.retrofit
 import com.example.votingapp.data.resource.remote.request.CreateVoteRequest
 import com.example.votingapp.data.resource.remote.request.JoinVoteRequest
 import com.example.votingapp.data.resource.remote.request.RegisterRequest
+import com.example.votingapp.data.resource.remote.request.SubmitVoteRequest
 import com.example.votingapp.data.resource.remote.response.success.JoinVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponseItem
@@ -53,4 +54,9 @@ interface ApiService {
     suspend fun getVoteByCode(
         @Path("code") code: String
     ): VoteByCodeResponse
+
+    @POST("/events/cast-vote")
+    suspend fun submitVote(
+        @Body body: SubmitVoteRequest
+    )
 }
