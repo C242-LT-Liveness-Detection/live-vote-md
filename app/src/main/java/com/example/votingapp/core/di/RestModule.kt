@@ -1,5 +1,6 @@
 package com.example.votingapp.core.di
 
+import android.util.Log
 import com.example.votingapp.BuildConfig
 import com.example.votingapp.data.resource.remote.retrofit.ApiService
 import com.example.votingapp.data.storage.UserPreferenceStore
@@ -25,8 +26,9 @@ class RestModule {
     @Provides
     @Singleton
     fun provideHttpClient(userPreferenceStore: UserPreferenceStore): OkHttpClient {
-        val token = runBlocking { userPreferenceStore.accessToken.first() }
+
         val authInterceptor = Interceptor { chain ->
+            val token = runBlocking { userPreferenceStore.accessToken.first() }
             val req = chain.request()
             val requestHeaders = req.newBuilder()
                 .addHeader(

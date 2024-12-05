@@ -84,6 +84,8 @@ fun LoginScreen(
         if (successMessage != null) {
             Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
             clearErrorMessages()
+            navigateToHome()
+            
         }
     }
 
@@ -112,7 +114,6 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(10.dp))
         AppButton(text = stringResource(R.string.login), enabled = loading.not()) {
             login()
-            navigateToHome()
 
         }
         Spacer(modifier = Modifier.height(10.dp))

@@ -9,8 +9,10 @@ import com.example.votingapp.data.resource.remote.response.error.LoginError
 import com.example.votingapp.data.resource.remote.response.error.RegisterError
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -21,7 +23,7 @@ class LoginViewModel @Inject constructor(
 
     val loginUiInfo by lazy {
         MutableStateFlow(
-            LoginUiInfo("email@gmail.com", "qwerty123")
+            LoginUiInfo("", "")
         )
     }
 
@@ -40,7 +42,9 @@ class LoginViewModel @Inject constructor(
                     loginUiInfo.value.password
                 )
                 userRepository.saveAccessToken(response.accessToken)
-                successMessage.value = response.message
+                withContext(Dispatchers.Main) {
+                    successMessage.value = "Login Success"
+                }
             } catch (e: HttpException) {
                 val jsonInString = e.response()?.errorBody()?.string()
                 val errorBody = Gson().fromJson(jsonInString, LoginError::class.java)
