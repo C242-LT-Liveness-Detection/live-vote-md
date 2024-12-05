@@ -21,6 +21,15 @@ class HomeViewModel @Inject constructor(
     val listVotes = MutableStateFlow(listOf<VoteModel>())
     val errorMessage = MutableStateFlow("")
     val isLoading = MutableStateFlow(false)
+    val userName = MutableStateFlow("")
+
+    init {
+        viewModelScope.launch {
+            userPreferenceStore.userName.collect {
+                userName.value = it ?: ""
+            }
+        }
+    }
 
     fun logout() {
         viewModelScope.launch {

@@ -15,16 +15,22 @@ class UserPreferenceStore @Inject constructor(
 
     companion object {
         private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
+        private val USER_NAME_KEY = stringPreferencesKey("user_name")
     }
 
-    suspend fun saveAccessToken(token: String) {
+    suspend fun saveAccessToken(token: String, userName: String) {
         dataStore.edit { preferences ->
             preferences[ACCESS_TOKEN_KEY] = token
+            preferences[USER_NAME_KEY] = userName
         }
     }
 
     val accessToken: Flow<String?> = dataStore.data.map { preferences ->
         preferences[ACCESS_TOKEN_KEY]
+    }
+
+    val userName: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[USER_NAME_KEY]
     }
 
     suspend fun clear() {

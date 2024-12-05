@@ -13,11 +13,11 @@ fun NavController.navigateToLogin(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.loginScreen(
-    navigateToHome: () -> Unit
+    navcontroller: NavController
 ) {
     composable(route = loginNavigationRoute) {
         LoginRoute(
-            navigateToHome = navigateToHome
+            navController = navcontroller
         )
     }
 }

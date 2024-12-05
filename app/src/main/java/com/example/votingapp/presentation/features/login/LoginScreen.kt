@@ -24,7 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.votingapp.R
+import com.example.votingapp.core.navigation.navigateToHome
+import com.example.votingapp.core.navigation.navigateToRegister
 import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.InputPassword
@@ -34,7 +37,7 @@ import com.example.votingapp.presentation.components.InputTextField
 internal fun LoginRoute(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit
+    navController: NavController
 ) {
     val errorMessages = viewModel.errorMessages.value
     val registerUiInfo = viewModel.loginUiInfo.collectAsStateWithLifecycle().value
@@ -50,7 +53,7 @@ internal fun LoginRoute(
         viewModel.loading.value,
         viewModel::clearErrorMessages,
         viewModel.successMessage.value,
-        navigateToHome = navigateToHome
+        navController = navController
     )
 }
 
@@ -67,10 +70,10 @@ fun LoginScreen(
     loading: Boolean = false,
     clearErrorMessages: () -> Unit = {},
     successMessage: String? = null,
-    navigateToHome: () -> Unit = {},
+    navController: NavController
 
 
-    ) {
+) {
     val context = LocalContext.current
     LaunchedEffect(errorMessages) {
         if (errorMessages != null) {
@@ -84,8 +87,8 @@ fun LoginScreen(
         if (successMessage != null) {
             Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
             clearErrorMessages()
-            navigateToHome()
-            
+            navController.navigateToHome()
+
         }
     }
 
@@ -117,14 +120,14 @@ fun LoginScreen(
 
         }
         Spacer(modifier = Modifier.height(10.dp))
-        LoginText(onRegisterClick = {
-//            navigateToLogin()
+        RegisterText(onRegisterClick = {
+            navController.navigateToRegister()
         })
     }
 }
 
 @Composable
-fun LoginText(onRegisterClick: () -> Unit) {
+fun RegisterText(onRegisterClick: () -> Unit) {
     val annotatedString = buildAnnotatedString {
         append("Belum punya akun? ")
         withLink(
@@ -149,17 +152,3 @@ fun LoginText(onRegisterClick: () -> Unit) {
 
 }
 
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LoginScreenPreview() {
-    AppTheme {
-        LoginScreen(
-            loginUiInfo = LoginUiInfo(
-                email = "",
-                password = ""
-            ),
-
-            )
-    }
-}

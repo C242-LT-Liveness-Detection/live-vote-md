@@ -24,9 +24,9 @@ class UserRepository @Inject constructor(
     }
 
 
-    suspend fun saveAccessToken(token: String) {
-        
-        userPreferenceStore.saveAccessToken(token)
+    suspend fun saveAccessToken(token: String, userName: String) {
+
+        userPreferenceStore.saveAccessToken(token, userName)
     }
 
 }

@@ -61,6 +61,7 @@ internal fun HomeRoute(
 
     HomeScreen(
         listVote = listVote,
+        userName = viewModel.userName.collectAsState().value,
         errorMessage = errorMessage,
         isLoading = isLoading,
         viewModel = viewModel,
@@ -73,6 +74,7 @@ internal fun HomeRoute(
 @Composable
 fun HomeScreen(
     listVote: List<VoteModel>,
+    userName: String,
     errorMessage: String,
     isLoading: Boolean,
     viewModel: HomeViewModel,
@@ -129,7 +131,7 @@ fun HomeScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
                             Text(
-                                text = "Hello, User!",
+                                text = "Hello, Mardi",
                                 style = MaterialTheme.typography.headlineSmall,
                                 color = Color.White,
 
@@ -226,7 +228,7 @@ fun HomeScreen(
             }
 
         }
-        
+
         if (isLoading) {
             item {
                 CircularProgressIndicator(

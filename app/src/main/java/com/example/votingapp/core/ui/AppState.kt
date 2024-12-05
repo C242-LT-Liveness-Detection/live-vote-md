@@ -37,7 +37,7 @@ fun rememberAppState(
             windowSizeClass = windowSizeClass,
             coroutineScope = coroutineScope
         )
-    }
+}
 }
 
 @Stable

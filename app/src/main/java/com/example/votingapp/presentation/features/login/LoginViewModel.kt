@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.auth0.android.jwt.JWT
 import com.example.votingapp.data.repositories.UserRepository
 import com.example.votingapp.data.resource.remote.response.error.LoginError
 import com.example.votingapp.data.resource.remote.response.error.RegisterError
@@ -41,18 +42,28 @@ class LoginViewModel @Inject constructor(
                     loginUiInfo.value.email,
                     loginUiInfo.value.password
                 )
-                userRepository.saveAccessToken(response.accessToken)
+                val jwt = JWT(response.accessToken)
+                userRepository.saveAccessToken(
+                    response.accessToken,
+                    jwt.getClaim("name").asString() ?: ""
+                )
                 withContext(Dispatchers.Main) {
                     successMessage.value = "Login Success"
                 }
             } catch (e: HttpException) {
+
+                if (e.code() == 401) {
+                    errorMessages.value = "Email atau password salah"
+                    return@launch
+                }
+
                 val jsonInString = e.response()?.errorBody()?.string()
                 val errorBody = Gson().fromJson(jsonInString, LoginError::class.java)
-                Log.d("RegisterViewModel", "register: ${e}")
-                errorMessages.value = "ada yang error"
+                errorMessages.value = errorBody.detail?.get(0)?.msg
+
             } catch (e: Exception) {
                 errorMessages.value = "An error occurred"
-                Log.d("RegisterViewModel", "register: ${e.message}")
+                Log.d("LoginViewModel", "login: ${e.message}")
             } finally {
                 loading.value = false
             }

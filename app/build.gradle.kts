@@ -24,7 +24,7 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "BASE_URL", "\"http://34.101.204.142/\"")
+        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8000/\"")
 
     }
 
@@ -96,4 +96,5 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.jwtdecode)
 }

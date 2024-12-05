@@ -22,11 +22,7 @@ fun AppNavHost(
         modifier = modifier,
     ) {
         loginScreen(
-            navigateToHome = {
-                Log.d("AppNavHost", "navigateToHome")
-                navController.navigate(homeNavigationRoute)
-//                navController.navigate(homeNavigationRoute)
-            }
+            navcontroller = navController
         )
         registerScreen()
         homeScreen(
