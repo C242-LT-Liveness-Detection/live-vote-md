@@ -21,10 +21,17 @@ class JoinVotingViewModel @Inject constructor(
     val code = mutableStateOf("")
     val errorMessage = mutableStateOf<String?>(null)
     val successMessage = mutableStateOf<String?>(null)
+    val loading = mutableStateOf(false)
 
     private fun joinVote() {
+        if (code.value.isEmpty()) {
+            errorMessage.value = "Kode tidak boleh kosong"
+            return
+        }
         viewModelScope.launch {
             try {
+                loading.value = true
+
 
                 val response = voteRepository.joinVote(code = code.value)
                 successMessage.value = "Yeay, Berhasil"
@@ -33,6 +40,11 @@ class JoinVotingViewModel @Inject constructor(
                     errorMessage.value = "Ups, Kode yang anda masukkan salah"
                 }
                 Log.e("JoinVotingViewModel", "joinVote: ${e.message()}")
+            } catch (e: Exception) {
+                errorMessage.value = "Ups, Terjadi kesalahan"
+                Log.e("JoinVotingViewModel", "joinVote: ${e.message}")
+            } finally {
+                loading.value = false
             }
         }
     }

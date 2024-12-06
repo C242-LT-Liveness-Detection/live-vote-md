@@ -23,7 +23,7 @@ class ChoseVoteViewModel @Inject constructor(
     val selectedOption = mutableStateOf<List<Int>>(emptyList())
 
     fun getVoteByCode(uniqueCode: String) {
-        Log.d("ChoseVoteViewModel", "getVoteByCode: $uniqueCode")
+        
         viewModelScope.launch {
             try {
                 val response = voteRepository.getVoteByCode(uniqueCode)
@@ -57,7 +57,11 @@ class ChoseVoteViewModel @Inject constructor(
             }
 
             is ChoseVoteEvent.SubmitVote -> {
-                Log.d("ChoseVoteViewModel", "submitVote: ${selectedOption.value}")
+                if (selectedOption.value.isEmpty()) {
+                    errorMessages.value = "Pilihan tidak boleh kosong"
+                    return
+                }
+                loading.value = true
                 viewModelScope.launch {
                     try {
                         voteRepository.submitVote(event.code, selectedOption.value)
@@ -68,6 +72,8 @@ class ChoseVoteViewModel @Inject constructor(
                     } catch (e: HttpException) {
                         errorMessages.value = e.message()
                         Log.e("ChoseVoteViewModel", "submitVote: ${e.message()}")
+                    } finally {
+                        loading.value = false
                     }
                 }
             }

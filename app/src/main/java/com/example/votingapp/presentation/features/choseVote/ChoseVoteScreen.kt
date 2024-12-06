@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -100,6 +101,8 @@ fun ChoseVoteScreen(
         )
     }
 
+
+
     if (loading || vote == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -192,6 +195,25 @@ fun ChoseVoteScreen(
             AppButton("Lanjut") {
                 onEvent(ChoseVoteEvent.SubmitVote(vote.uniqueCode))
             }
+        }
+    }
+    if (loading) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(Color.Gray.copy(alpha = 0.5f))
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {}
+        )
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            CircularProgressIndicator()
         }
     }
 }
