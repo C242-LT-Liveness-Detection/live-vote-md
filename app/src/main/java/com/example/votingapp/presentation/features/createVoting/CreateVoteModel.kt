@@ -26,8 +26,8 @@ class CreateVoteModel @Inject constructor(
                 "",
                 listOf(""),
                 true,
-                null,
-                null
+                System.currentTimeMillis() + 1000 * 60 * 60 * 24,
+                "00:00"
             )
         )
     }
@@ -37,6 +37,7 @@ class CreateVoteModel @Inject constructor(
 
     val successMessage = MutableStateFlow<String?>(null)
     val errorMessage = MutableStateFlow<String?>(null)
+    val isLoading = MutableStateFlow(false)
 
     fun onEvent(event: CreateVoteEvent) {
         when (event) {
@@ -117,6 +118,7 @@ class CreateVoteModel @Inject constructor(
 
     private fun createVote() {
         viewModelScope.launch {
+            isLoading.value = true
             val endDate =
                 "${SimpleDateFormat("dd/MM/yyyy").format(createVoteUiInfo.value.endDate)}:${createVoteUiInfo.value.endTime}"
 
@@ -131,15 +133,23 @@ class CreateVoteModel @Inject constructor(
                     isMultipleChoice = createVoteUiInfo.value.allowMultipleSelection,
                     endDate = endDateIso,
                 )
-                successMessage.value = "Yeay, Berhasil"
+                successMessage.value = response.uniqueCode
+                isLoading.value = false
+            } catch (e: HttpException) {
+                if (e.code() == 422) {
+                    errorMessage.value = "Pastikan semua input terisi"
+
+                } else {
+                    errorMessage.value = e.message
+                }
+                Log.e("CreateVoteModel", "createVote: ${e.message}")
+
             } catch (e: Exception) {
                 errorMessage.value = e.message
                 Log.e("CreateVoteModel", "createVote: ${e.message}")
 
-            } catch (e: HttpException) {
-                errorMessage.value = e.message()
-                Log.e("CreateVoteModel", "createVote: ${e.message}")
-
+            } finally {
+                isLoading.value = false
             }
         }
 
@@ -151,8 +161,8 @@ data class CreateVoteUiInfo(
     val question: String,
     val options: List<String>,
     val allowMultipleSelection: Boolean,
-    val endDate: Long?,
-    val endTime: String?
+    val endDate: Long,
+    val endTime: String
 )
 
 

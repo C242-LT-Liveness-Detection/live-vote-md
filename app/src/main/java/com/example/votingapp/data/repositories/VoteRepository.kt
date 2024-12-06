@@ -3,6 +3,7 @@ package com.example.votingapp.data.repositories
 import com.example.votingapp.data.resource.remote.request.CreateVoteRequest
 import com.example.votingapp.data.resource.remote.request.JoinVoteRequest
 import com.example.votingapp.data.resource.remote.request.SubmitVoteRequest
+import com.example.votingapp.data.resource.remote.response.success.CreateVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.JoinVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponseItem
 import com.example.votingapp.data.resource.remote.response.success.VoteByCodeResponse
@@ -25,7 +26,7 @@ class VoteRepository @Inject constructor(
         options: List<String>,
         isMultipleChoice: Boolean,
         endDate: String,
-    ) {
+    ): CreateVoteResponse {
         val request = CreateVoteRequest(
             title = title,
             question = question,
@@ -33,7 +34,7 @@ class VoteRepository @Inject constructor(
             isMultipleChoice = isMultipleChoice,
             endDate = endDate,
         )
-        apiService.createVote(
+        return apiService.createVote(
             request
         )
     }
