@@ -1,6 +1,5 @@
 package com.example.votingapp.presentation.features.createVoting
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -10,6 +9,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,8 +24,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material3.Button
+import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -41,23 +42,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.votingapp.core.navigation.navigateToChoseVote
 import com.example.votingapp.core.navigation.navigateToHome
 import com.example.votingapp.core.ui.AppTheme
+import com.example.votingapp.core.utils.PastOrPresentSelectableDates
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.CreateVotingOption
 import com.example.votingapp.presentation.components.DateInput
 import com.example.votingapp.presentation.components.DialWithDialogExample
 import com.example.votingapp.presentation.components.DialogMessage
+import com.example.votingapp.presentation.components.DialogSuccessCreateVote
 import com.example.votingapp.presentation.components.DialogType
 import com.example.votingapp.presentation.components.InputTextField
-import com.example.votingapp.presentation.features.joinVote.JoinVoteEvent
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -75,11 +75,12 @@ fun CreateVoteRoute(
         timePickerShow = viewModel.showTimePicker.collectAsStateWithLifecycle().value,
         onEvent = { viewModel.onEvent(it) },
         successMessage = viewModel.successMessage.collectAsStateWithLifecycle().value,
-        errorMessage = viewModel.errorMessage.collectAsStateWithLifecycle().value
+        errorMessage = viewModel.errorMessage.collectAsStateWithLifecycle().value,
+        isLoading = viewModel.isLoading.collectAsStateWithLifecycle().value
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun CreateVoteScreen(
     navController: NavController,
@@ -88,27 +89,32 @@ fun CreateVoteScreen(
     timePickerShow: Boolean,
     onEvent: (CreateVoteEvent) -> Unit,
     successMessage: String? = null,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    isLoading: Boolean
 ) {
     var showVoteCreation by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = System.currentTimeMillis(),
+        initialSelectedDateMillis = createVoteUiInfo.endDate,
+        selectableDates = PastOrPresentSelectableDates
     )
     val stateTimePicker = rememberTimePickerState(
         is24Hour = true
     )
 
     successMessage?.let {
-        DialogMessage(
-            message = it,
+        DialogSuccessCreateVote(
+            code = it,
+
             confirmButton = {
-                TextButton({
-                    onEvent(CreateVoteEvent.ClearSuccess)
-                    navController.navigateToHome()
-                }) {
+                TextButton(
+                    onClick = {
+                        navController.navigateToHome()
+                    }
+                ) {
                     Text("Oke")
                 }
-            },
+
+            }
         )
     }
 
@@ -125,6 +131,7 @@ fun CreateVoteScreen(
             },
         )
     }
+
     // Animasi transisi antar halaman
     AnimatedContent(
         targetState = showVoteCreation,
@@ -250,11 +257,11 @@ fun CreateVoteScreen(
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 Text(
-                                    createVoteUiInfo.endDate?.let {
+                                    createVoteUiInfo.endDate.let {
                                         SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
                                             it
                                         )
-                                    } ?: "Pilih tanggal"
+                                    }
                                 )
                             }
 
@@ -303,7 +310,7 @@ fun CreateVoteScreen(
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 Text(
-                                    createVoteUiInfo.endTime ?: "Pilih waktu"
+                                    createVoteUiInfo.endTime
                                 )
                             }
 
@@ -348,6 +355,9 @@ fun CreateVoteScreen(
                     showVoteCreation = true
                 }
             }
+
+
+
             DateInput(
                 calendarShow,
                 datePickerState,
@@ -383,6 +393,51 @@ fun CreateVoteScreen(
             )
         }
     }
+    if (isLoading) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(Color.Gray.copy(alpha = 0.5f))
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {}
+        )
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            CircularWavyProgressIndicator()
+        }
+    }
+
 }
 
 
+@Composable
+@Preview(showSystemUi = true)
+fun CreateVoteScreenPreview() {
+    AppTheme {
+        CreateVoteScreen(
+            navController = NavController(
+                context = androidx.compose.ui.platform.LocalContext.current
+            ),
+            createVoteUiInfo = CreateVoteUiInfo(
+                "",
+                "",
+                listOf(""),
+                true,
+                System.currentTimeMillis() + 1000 * 60 * 60 * 24,
+                "00:00"
+            ),
+            calendarShow = false,
+            timePickerShow = false,
+            onEvent = {},
+            successMessage = null,
+            errorMessage = null,
+            isLoading = true
+        )
+    }
+}
