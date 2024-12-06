@@ -45,6 +45,8 @@ fun DateInput(
                 colors = DatePickerDefaults.colors(
                     containerColor = Color.White
                 ),
+                title = { Text("Pilih Tanggal") },
+                
                 headline = { Text("Batas Akhir") },
                 state = datePickerState,
                 modifier = Modifier.verticalScroll(rememberScrollState()),

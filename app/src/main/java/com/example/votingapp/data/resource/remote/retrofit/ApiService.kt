@@ -4,6 +4,7 @@ import com.example.votingapp.data.resource.remote.request.CreateVoteRequest
 import com.example.votingapp.data.resource.remote.request.JoinVoteRequest
 import com.example.votingapp.data.resource.remote.request.RegisterRequest
 import com.example.votingapp.data.resource.remote.request.SubmitVoteRequest
+import com.example.votingapp.data.resource.remote.response.success.CreateVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.JoinVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponseItem
@@ -43,7 +44,7 @@ interface ApiService {
     @POST("events/create")
     suspend fun createVote(
         @Body createVoteRequest: CreateVoteRequest
-    )
+    ): CreateVoteResponse
 
     @POST("events/join")
     suspend fun joinVote(
