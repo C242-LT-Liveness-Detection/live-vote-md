@@ -88,8 +88,13 @@ class AppState(
             Destination.CreateVoting -> navController.navigateToCreateVote(topLevelNavOptions)
             Destination.JoinVoting -> navController.navigateToJoinVote(topLevelNavOptions)
             Destination.ChoseVote -> navController.navigateToCreateVote(topLevelNavOptions)
+            Destination.DetailVote -> {
+            }
         }
 
+    }
+    fun navigateToDetailVote(voteCode: String) {
+        navController.navigateToDetailVote(voteCode)
     }
 
     fun onBackClick() {
