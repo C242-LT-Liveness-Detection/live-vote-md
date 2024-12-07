@@ -35,7 +35,7 @@ fun AppNavHost(
 
             navigateToLogin = {
                 navController.navigate(loginNavigationRoute)
-            }
+            },
             
             navigateToDetailVote = { voteCode ->
                 navController.navigateToDetailVote(voteCode)
