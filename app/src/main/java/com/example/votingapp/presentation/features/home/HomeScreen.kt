@@ -50,7 +50,8 @@ internal fun HomeRoute(
     navigateToCreateVoting: () -> Unit,
     navigateToJoinVoting: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    navigateToDetailVoting: (String) -> Unit
 ) {
     val listVote = viewModel.listVotes.collectAsState().value
     val errorMessage = viewModel.errorMessage.collectAsState().value
@@ -67,7 +68,8 @@ internal fun HomeRoute(
         viewModel = viewModel,
         onCreateVotingClick = navigateToCreateVoting,
         onJoinVotingClick = navigateToJoinVoting,
-        navigateToLogin = navigateToLogin
+        navigateToLogin = navigateToLogin,
+        navigateToDetailVote = navigateToDetailVoting
     )
 }
 
@@ -81,6 +83,7 @@ fun HomeScreen(
     onCreateVotingClick: () -> Unit,
     onJoinVotingClick: () -> Unit,
     navigateToLogin: () -> Unit,
+    navigateToDetailVote: (String) -> Unit
 ) {
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
     val dialogConfirmLogout = remember { mutableStateOf(false) }
@@ -251,7 +254,8 @@ fun HomeScreen(
                 items(listVote.size) { index ->
                     RecentVotingItem(
                         vote = listVote[index],
-
+                        onClick = { navigateToDetailVote(listVote[index].code) }
+                        )
                         )
                     Spacer(modifier = Modifier.height(16.dp))
 
