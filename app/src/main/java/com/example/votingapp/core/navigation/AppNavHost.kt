@@ -36,6 +36,10 @@ fun AppNavHost(
             navigateToLogin = {
                 navController.navigate(loginNavigationRoute)
             }
+            
+            navigateToDetailVote = { voteCode ->
+                navController.navigateToDetailVote(voteCode)
+            }
 
         )
         createVoteScreen(
@@ -46,6 +50,9 @@ fun AppNavHost(
         )
         choseVoteScreen(
             navController
+        )
+        detailVoteScreen(
+            navController = navController
         )
         welcomeScreen(
             navigateToLogin = {
