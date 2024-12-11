@@ -125,12 +125,12 @@ fun HomeScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(
-                                text = "Hello, Mardi",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = Color.White,
-
-                                )
+//                            Text(
+//                                text = "Hello, Mardi",
+//                                style = MaterialTheme.typography.headlineSmall,
+//                                color = Color.White,
+//
+//                                )
 
                             Box(
                                 modifier = Modifier
@@ -158,10 +158,10 @@ fun HomeScreen(
 
 
                                     ) {
-                                    DropdownMenuItem(
-                                        onClick = {},
-                                        text = { Text("Pengaturan") }
-                                    )
+//                                    DropdownMenuItem(
+//                                        onClick = {},
+//                                        text = { Text("Pengaturan") }
+//                                    )
                                     DropdownMenuItem(
                                         onClick = {
                                             dialogConfirmLogout.value = true
@@ -204,14 +204,14 @@ fun HomeScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
                             Text(
-                                "Recent Voting",
+                                "Voting saya",
                                 style = MaterialTheme.typography.titleMedium,
                             )
                             Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                "See All",
-                                color = MaterialTheme.colorScheme.primary,
-                            )
+//                            Text(
+//                                "See All",
+//                                color = MaterialTheme.colorScheme.primary,
+//                            )
                         }
 
                         Spacer(modifier = Modifier.height(16.dp))

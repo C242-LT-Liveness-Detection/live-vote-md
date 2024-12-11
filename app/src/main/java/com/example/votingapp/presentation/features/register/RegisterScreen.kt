@@ -1,7 +1,6 @@
 package com.example.votingapp.presentation.features.register
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,10 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -25,20 +24,61 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.votingapp.R
+import com.example.votingapp.core.navigation.loginNavigationRoute
 import com.example.votingapp.presentation.components.AppButton
+import com.example.votingapp.presentation.components.DialogMessage
+import com.example.votingapp.presentation.components.DialogType
 import com.example.votingapp.presentation.components.InputPassword
 import com.example.votingapp.presentation.components.InputTextField
 
 @Composable
 internal fun RegisterRoute(
+    navController: NavController,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val errorMessages = viewModel.errorMessages.value
+    val successMessage = viewModel.successMessage.value
     val registerUiInfo = viewModel.registerUiInfo.collectAsStateWithLifecycle().value
+
+    if (successMessage != null) {
+        DialogMessage(
+            message = successMessage,
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        navController.navigate(loginNavigationRoute) {
+                            popUpTo(loginNavigationRoute) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                ) {
+                    Text("Oke")
+                }
+            }
+        )
+    }
+
+    if (errorMessages != null) {
+        DialogMessage(
+            dialogType = DialogType.ERROR,
+            message = errorMessages,
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.clearErrorMessages()
+                    }
+                ) {
+                    Text("Oke")
+                }
+            }
+        )
+    }
+
     RegisterScreen(
         registerUiInfo,
-        errorMessages,
         viewModel::register,
         viewModel::onPasswordVisibilityChanged,
         viewModel::onNameChanged,
@@ -46,15 +86,13 @@ internal fun RegisterRoute(
         viewModel::onPasswordChanged,
         viewModel.passwordVisible.value,
         viewModel.loading.value,
-        viewModel::clearErrorMessages,
-        viewModel.successMessage.value
+        navController = navController
     )
 }
 
 @Composable
 fun RegisterScreen(
     registerUiInfo: RegisterUiInfo,
-    errorMessages: String? = null,
     register: () -> Unit = {},
     onPasswordVisibilityChanged: () -> Unit = {},
     onNameChanged: (String) -> Unit = {},
@@ -62,27 +100,10 @@ fun RegisterScreen(
     onPasswordChanged: (String) -> Unit = {},
     passwordVisible: Boolean = false,
     loading: Boolean = false,
-    clearErrorMessages: () -> Unit = {},
-    successMessage: String? = null,
+    navController: NavController
 
 
-    ) {
-    val context = LocalContext.current
-    LaunchedEffect(errorMessages) {
-        if (errorMessages != null) {
-            Toast.makeText(context, errorMessages, Toast.LENGTH_SHORT).show()
-            clearErrorMessages()
-        }
-
-    }
-
-    LaunchedEffect(successMessage) {
-        if (successMessage != null) {
-            Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
-            clearErrorMessages()
-        }
-    }
-
+) {
 
 
     Column(
@@ -121,7 +142,11 @@ fun RegisterScreen(
         }
         Spacer(modifier = Modifier.height(10.dp))
         LoginText(onRegisterClick = {
-//            navigateToLogin()
+            navController.navigate(loginNavigationRoute) {
+                popUpTo(loginNavigationRoute) {
+                    inclusive = true
+                }
+            }
         })
     }
 }

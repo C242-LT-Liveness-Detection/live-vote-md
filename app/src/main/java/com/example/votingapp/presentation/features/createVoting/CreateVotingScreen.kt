@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.votingapp.core.navigation.homeNavigationRoute
 import com.example.votingapp.core.navigation.navigateToHome
 import com.example.votingapp.core.utils.PastOrPresentSelectableDates
 import com.example.votingapp.presentation.components.AppButton
@@ -105,7 +106,9 @@ fun CreateVoteScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        navController.navigateToHome()
+                        navController.navigate(homeNavigationRoute) {
+                            popUpTo(homeNavigationRoute) { inclusive = true }
+                        }
                     }
                 ) {
                     Text("Oke")
@@ -183,18 +186,17 @@ fun CreateVoteScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Input Title
-                InputTextField(
-                    text = createVoteUiInfo.title,
-                    label = "Judul Voting",
-                    onValueChange = {
-                        onEvent(CreateVoteEvent.OnValueChange(it, "title"))
-                    },
+//                InputTextField(
+//                    text = createVoteUiInfo.title,
+//                    label = "Judul Voting",
+//                    onValueChange = {
+//                        onEvent(CreateVoteEvent.OnValueChange(it, "title"))
+//                    },
+//
+//                    )
+//                Spacer(modifier = Modifier.height(8.dp))
 
-                    )
-                Spacer(modifier = Modifier.height(8.dp))
 
-                // Input Description
                 InputTextField(
                     label = "Pertanyaan",
                     text = createVoteUiInfo.question,

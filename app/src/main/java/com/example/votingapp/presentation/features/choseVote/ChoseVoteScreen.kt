@@ -31,11 +31,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.votingapp.core.navigation.homeNavigationRoute
 import com.example.votingapp.core.navigation.navigateToHome
+import com.example.votingapp.core.ui.theme.AppTheme
+import com.example.votingapp.data.resource.remote.response.success.OptionsItem
 import com.example.votingapp.data.resource.remote.response.success.VoteByCodeResponse
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.DialogMessage
@@ -79,7 +84,12 @@ fun ChoseVoteScreen(
             confirmButton = {
                 TextButton({
                     onEvent(ChoseVoteEvent.ClearSuccess)
-                    navController.navigateToHome()
+                    navController.navigate(homeNavigationRoute) {
+
+                        popUpTo(homeNavigationRoute) {
+                            inclusive = true
+                        }
+                    }
                 }) {
                     Text("Oke")
                 }

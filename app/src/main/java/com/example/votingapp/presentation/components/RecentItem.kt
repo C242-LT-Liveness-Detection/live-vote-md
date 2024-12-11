@@ -39,14 +39,14 @@ fun RecentVotingItem(
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            Text(
-                vote.title,
-                style = MaterialTheme.typography.titleSmall
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+//            Text(
+//                vote.title,
+//                style = MaterialTheme.typography.titleSmall
+//            )
+//            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 vote.question,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodyLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
         }

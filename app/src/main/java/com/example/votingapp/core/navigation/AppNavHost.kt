@@ -26,7 +26,9 @@ fun AppNavHost(
         loginScreen(
             navcontroller = navController
         )
-        registerScreen()
+        registerScreen(
+            navController = navController
+        )
         homeScreen(
             navController = navController
 

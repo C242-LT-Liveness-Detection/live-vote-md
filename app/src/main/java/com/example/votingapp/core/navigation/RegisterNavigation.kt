@@ -12,8 +12,12 @@ fun NavController.navigateToRegister(navOptions: NavOptions? = null) {
     this.navigate(registerNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.registerScreen() {
+fun NavGraphBuilder.registerScreen(
+    navController: NavController
+) {
     composable(route = registerNavigationRoute) {
-        RegisterRoute()
+        RegisterRoute(
+            navController = navController
+        )
     }
 }

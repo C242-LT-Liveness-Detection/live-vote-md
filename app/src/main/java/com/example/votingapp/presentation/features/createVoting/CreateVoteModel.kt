@@ -127,7 +127,7 @@ class CreateVoteModel @Inject constructor(
             )
             try {
                 val response = voteRepository.createVote(
-                    title = createVoteUiInfo.value.title,
+                    title = "title",
                     question = createVoteUiInfo.value.question,
                     options = createVoteUiInfo.value.options.filter { it.isNotEmpty() },
                     isMultipleChoice = createVoteUiInfo.value.allowMultipleSelection,
