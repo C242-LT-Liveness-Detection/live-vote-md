@@ -77,6 +77,14 @@ enum class Destination(
         isTopBarTab = false,
         titleTextId = R.string.chose_vote,
         route = choseVoteNavigationRoute
-    )
+    ),
+
+    Liveness(
+        isTopLevelDestination = true,
+        isBottomBarTab = false,
+        isTopBarTab = false,
+        titleTextId = R.string.liveness,
+        route = livenessNavigationRoute
+    ),
 
 }

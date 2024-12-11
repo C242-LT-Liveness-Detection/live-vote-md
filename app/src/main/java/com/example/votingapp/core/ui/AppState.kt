@@ -15,6 +15,7 @@ import com.example.votingapp.core.navigation.Destination
 import com.example.votingapp.core.navigation.navigateToCreateVote
 import com.example.votingapp.core.navigation.navigateToHome
 import com.example.votingapp.core.navigation.navigateToJoinVote
+import com.example.votingapp.core.navigation.navigateToLiveness
 import com.example.votingapp.core.navigation.navigateToLogin
 import com.example.votingapp.core.navigation.navigateToRegister
 import com.example.votingapp.core.navigation.navigateToWelcome
@@ -37,7 +38,7 @@ fun rememberAppState(
             windowSizeClass = windowSizeClass,
             coroutineScope = coroutineScope
         )
-}
+    }
 }
 
 @Stable
@@ -88,6 +89,7 @@ class AppState(
             Destination.CreateVoting -> navController.navigateToCreateVote(topLevelNavOptions)
             Destination.JoinVoting -> navController.navigateToJoinVote(topLevelNavOptions)
             Destination.ChoseVote -> navController.navigateToCreateVote(topLevelNavOptions)
+            Destination.Liveness -> navController.navigateToLiveness(topLevelNavOptions)
         }
 
     }

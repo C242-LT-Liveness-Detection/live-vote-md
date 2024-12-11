@@ -8,4 +8,5 @@
     <string name="create_voting">Create Voting</string>
     <string name="join_voting">Join Voting</string>
     <string name="chose_vote">Chose Vote\n</string>
+    <string name="liveness">Liveness</string>
 </resources>
