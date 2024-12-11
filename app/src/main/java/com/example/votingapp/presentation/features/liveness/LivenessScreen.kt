@@ -1,52 +1,70 @@
 package com.example.votingapp.presentation.features.liveness
 
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation.NavController
+import com.example.votingapp.core.navigation.navigateToCreateVote
+import com.example.votingapp.presentation.components.DialogMessage
 
-
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun CameraScreen(onPreviewReady: (PreviewView) -> Unit, guideText: String = "") {
-    Column(modifier = Modifier.fillMaxSize()) {
-        CameraPreview(
-            modifier = Modifier.weight(1f),
-            onPreviewReady = onPreviewReady
+internal fun LivenessRoute(
+    navController: NavController,
+    viewModel: LivenessViewModel = hiltViewModel(),
+) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    if (viewModel.isSuccessful.value) {
+        viewModel.vibration(context)
+        DialogMessage(
+            message = "Berhasil",
+            confirmButton = {
+                TextButton(
+                    onClick = { navController.navigateToCreateVote() }
+                ) {
+                    Text("OK")
+                }
+            }
         )
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .background(Color.White)
-        ) {
-            Text(
-                text = "Silahkan menghadap ke Kiri",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
     }
+
+    LivenessScreen(
+        setupCamera = viewModel::setupCamera,
+        lifecycleOwner = lifecycleOwner,
+        context = context
+    )
 }
 
-
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun CameraPreview(modifier: Modifier = Modifier, onPreviewReady: (PreviewView) -> Unit) {
+fun LivenessScreen(
+    setupCamera: (context: Context, previewView: PreviewView, lifecycleOwner: LifecycleOwner) -> Unit,
+    lifecycleOwner: LifecycleOwner,
+    context: Context
+
+
+) {
+
+
     AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            val previewView = PreviewView(context)
-            onPreviewReady(previewView)
-            previewView
+        modifier = Modifier.fillMaxSize(),
+        factory = { ctx ->
+            PreviewView(ctx).also { previewView ->
+                setupCamera(context, previewView, lifecycleOwner)
+            }
         }
     )
 }
+
