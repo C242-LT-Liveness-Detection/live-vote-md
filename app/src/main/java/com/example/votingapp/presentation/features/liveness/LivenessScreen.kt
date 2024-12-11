@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
+import com.example.votingapp.core.navigation.navigateToChoseVote
 import com.example.votingapp.core.navigation.navigateToCreateVote
 import com.example.votingapp.presentation.components.DialogMessage
 
@@ -22,6 +23,7 @@ import com.example.votingapp.presentation.components.DialogMessage
 @Composable
 internal fun LivenessRoute(
     navController: NavController,
+    voteCode: String,
     viewModel: LivenessViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -32,7 +34,7 @@ internal fun LivenessRoute(
             message = "Berhasil",
             confirmButton = {
                 TextButton(
-                    onClick = { navController.navigateToCreateVote() }
+                    onClick = { navController.navigateToChoseVote(voteCode) }
                 ) {
                     Text("OK")
                 }

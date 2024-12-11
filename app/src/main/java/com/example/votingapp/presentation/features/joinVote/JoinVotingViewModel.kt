@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.votingapp.data.repositories.VoteRepository
+import com.example.votingapp.data.resource.remote.response.error.JoinError
+import com.example.votingapp.data.resource.remote.response.error.LoginError
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -39,7 +42,10 @@ class JoinVotingViewModel @Inject constructor(
                 if (e.code() == 404) {
                     errorMessage.value = "Ups, Kode yang anda masukkan salah"
                 }
-                Log.e("JoinVotingViewModel", "joinVote: ${e.message()}")
+                val jsonInString = e.response()?.errorBody()?.string()
+                val errorBody = Gson().fromJson(jsonInString, JoinError::class.java)
+                errorMessage.value = errorBody.detail
+
             } catch (e: Exception) {
                 errorMessage.value = "Ups, Terjadi kesalahan"
                 Log.e("JoinVotingViewModel", "joinVote: ${e.message}")

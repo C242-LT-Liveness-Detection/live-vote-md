@@ -1,5 +1,7 @@
 package com.example.votingapp.core.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -14,6 +16,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import com.example.votingapp.core.navigation.AppNavHost
 import com.example.votingapp.core.navigation.Destination
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(
     ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class,
     ExperimentalComposeUiApi::class

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.votingapp.core.navigation.navigateToChoseVote
+import com.example.votingapp.core.navigation.navigateToLiveness
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.DialogMessage
 import com.example.votingapp.presentation.components.DialogType
@@ -61,7 +62,7 @@ fun JoinVotingScreen(
             confirmButton = {
                 TextButton({
                     onEvent(JoinVoteEvent.ClearSuccess)
-                    navController.navigateToChoseVote(code)
+                    navController.navigateToLiveness(code)
                 }) {
                     Text("Oke")
                 }

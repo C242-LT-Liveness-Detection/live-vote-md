@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.votingapp.core.navigation.Destination
+import com.example.votingapp.core.navigation.navigateToChoseVote
 import com.example.votingapp.core.navigation.navigateToCreateVote
 import com.example.votingapp.core.navigation.navigateToHome
 import com.example.votingapp.core.navigation.navigateToJoinVote
@@ -48,61 +49,9 @@ class AppState(
     val coroutineScope: CoroutineScope,
 
     ) {
-    val currentDestinationAsState: NavDestination?
-        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
-
-    val currentDestination: Destination?
-        @Composable get() = Destination.values().asList()
-            .filter { it.route == currentDestinationAsState?.route }.firstOrNull()
-
-    val shouldShowBottomBar: Boolean
-        @Composable get() = Destination.values().asList()
-            .filter { it.isBottomBarTab }.map { it.route }
-            .contains(currentDestinationAsState?.route)
-
-    val shouldShowTopAppBar: Boolean
-        @Composable get() = Destination.values().asList()
-            .filter { it.isTopBarTab }.map { it.route }.contains(currentDestinationAsState?.route)
-
-    val destinationWithBottomBars: List<Destination>
-        get() = Destination.values().asList()
-            .filter { it.isBottomBarTab && it.isTopLevelDestination }
-
-    val destinationWithTopBar: List<Destination>
-        get() = Destination.values().asList()
-            .filter { it.isTopBarTab }
-
-
-    fun navigateToTopLevelDestination(destination: Destination) {
-        val topLevelNavOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
-        when (destination) {
-            Destination.Welcome -> navController.navigateToWelcome(topLevelNavOptions)
-            Destination.REGISTER -> navController.navigateToRegister(topLevelNavOptions)
-            Destination.LOGIN -> navController.navigateToLogin(topLevelNavOptions)
-            Destination.Home -> navController.navigateToHome(topLevelNavOptions)
-            Destination.CreateVoting -> navController.navigateToCreateVote(topLevelNavOptions)
-            Destination.JoinVoting -> navController.navigateToJoinVote(topLevelNavOptions)
-            Destination.ChoseVote -> navController.navigateToCreateVote(topLevelNavOptions)
-            Destination.Liveness -> navController.navigateToLiveness(topLevelNavOptions)
-        }
-
-    }
 
     fun onBackClick() {
         navController.popBackStack()
     }
 
-}
-
-@Composable
-@ReadOnlyComposable
-private fun resources(): Resources {
-    LocalConfiguration.current
-    return LocalContext.current.resources
 }
