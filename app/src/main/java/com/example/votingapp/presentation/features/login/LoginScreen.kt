@@ -18,6 +18,7 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
@@ -101,7 +102,10 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        InputTextField(text = loginUiInfo.email, label = "Email") {
+        InputTextField(
+            keyboardType = KeyboardType.Email,
+            text = loginUiInfo.email, label = "Email"
+        ) {
             onEmailChanged(it)
         }
 

@@ -1,9 +1,11 @@
 package com.example.votingapp
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -12,6 +14,7 @@ import androidx.compose.ui.Modifier
 import com.example.votingapp.core.navigation.choseVoteNavigationRoute
 import com.example.votingapp.core.navigation.homeNavigationRoute
 import com.example.votingapp.core.navigation.joinVoteNavigationRoute
+import com.example.votingapp.core.navigation.livenessNavigationRoute
 import com.example.votingapp.core.navigation.welcomeNavigationRoute
 import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.core.ui.AndroidTemplateApp
@@ -28,6 +31,8 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var userPreferenceStore: UserPreferenceStore
+
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -52,12 +57,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }

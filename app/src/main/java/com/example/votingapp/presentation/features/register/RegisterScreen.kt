@@ -19,6 +19,7 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.votingapp.presentation.components.AppButton
@@ -96,7 +97,10 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        InputTextField(text = registerUiInfo.email, label = "Email") {
+        InputTextField(
+            keyboardType = KeyboardType.Email,
+            text = registerUiInfo.email, label = "Email"
+        ) {
             onEmailChanged(it)
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -106,6 +110,7 @@ fun RegisterScreen(
         }
         Spacer(modifier = Modifier.height(10.dp))
         InputPassword(
+
             passwordVisible = passwordVisible,
             value = registerUiInfo.password,
             togglePasswordVisibility = onPasswordVisibilityChanged,

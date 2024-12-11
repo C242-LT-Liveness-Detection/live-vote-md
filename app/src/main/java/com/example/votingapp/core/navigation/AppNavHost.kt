@@ -29,16 +29,7 @@ fun AppNavHost(
         )
         registerScreen()
         homeScreen(
-            navigateToCreateVoting = {
-                navController.navigate(createVoteNavigationRoute)
-            },
-            navigateToJoinVoting = {
-                navController.navigate(joinVoteNavigationRoute)
-            },
-
-            navigateToLogin = {
-                navController.navigate(loginNavigationRoute)
-            }
+            navController = navController
 
         )
         createVoteScreen(

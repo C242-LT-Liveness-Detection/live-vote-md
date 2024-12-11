@@ -41,16 +41,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.votingapp.R
 import com.example.votingapp.core.domain.models.VoteModel
+import com.example.votingapp.core.navigation.loginNavigationRoute
+import com.example.votingapp.core.navigation.navigateToCreateVote
+import com.example.votingapp.core.navigation.navigateToJoinVote
+import com.example.votingapp.core.navigation.navigateToLogin
 import com.example.votingapp.presentation.components.RecentVotingItem
 
 @Composable
 internal fun HomeRoute(
-    navigateToCreateVoting: () -> Unit,
-    navigateToJoinVoting: () -> Unit,
+    navController: NavController,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToLogin: () -> Unit
 ) {
     val listVote = viewModel.listVotes.collectAsState().value
     val errorMessage = viewModel.errorMessage.collectAsState().value
@@ -65,9 +68,7 @@ internal fun HomeRoute(
         errorMessage = errorMessage,
         isLoading = isLoading,
         viewModel = viewModel,
-        onCreateVotingClick = navigateToCreateVoting,
-        onJoinVotingClick = navigateToJoinVoting,
-        navigateToLogin = navigateToLogin
+        navController = navController
     )
 }
 
@@ -78,9 +79,7 @@ fun HomeScreen(
     errorMessage: String,
     isLoading: Boolean,
     viewModel: HomeViewModel,
-    onCreateVotingClick: () -> Unit,
-    onJoinVotingClick: () -> Unit,
-    navigateToLogin: () -> Unit,
+    navController: NavController,
 ) {
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
     val dialogConfirmLogout = remember { mutableStateOf(false) }
@@ -187,13 +186,13 @@ fun HomeScreen(
                             horizontalArrangement = Arrangement.SpaceAround,
                         ) {
                             CardFeature(
-                                onClick = onCreateVotingClick,
+                                onClick = { navController.navigateToCreateVote() },
                                 text = "Create Voting",
                                 icon = R.drawable.checklist
                             )
 
                             CardFeature(
-                                onClick = onJoinVotingClick,
+                                onClick = { navController.navigateToJoinVote() },
                                 text = "Join Voting",
                                 icon = R.drawable.vote
                             )
@@ -269,7 +268,11 @@ fun HomeScreen(
             onConfirm = {
                 dialogConfirmLogout.value = false
                 viewModel.logout()
-                navigateToLogin()
+                navController.navigate(loginNavigationRoute) {
+                    popUpTo(loginNavigationRoute) {
+                        inclusive = true
+                    }
+                }
             }
         )
     }
