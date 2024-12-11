@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
@@ -40,13 +39,11 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.votingapp.R
-import com.example.votingapp.core.ui.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 fun DialogSuccessCreateVote(
-    dialogType: DialogType = DialogType.SUCCESS,
     code: String,
     dismissButton: @Composable (() -> Unit)? = null,
     confirmButton: @Composable (() -> Unit)? = null,
@@ -156,17 +153,3 @@ fun DialogSuccessCreateVote(
 
 }
 
-
-@Preview(showBackground = true)
-@Composable
-
-fun DialogSuccessCreateVotePreview() {
-    AppTheme {
-        DialogSuccessCreateVote(code = "sdasdasd", dismissButton = {}, confirmButton = {
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(text = "Oke")
-            }
-
-        })
-    }
-}

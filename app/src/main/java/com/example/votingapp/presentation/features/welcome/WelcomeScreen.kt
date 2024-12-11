@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -22,7 +20,6 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.votingapp.R
-import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.core.ui.theme.AppTypography
 import com.example.votingapp.presentation.components.AppButton
 
@@ -98,12 +95,4 @@ fun AnimatedPreloader(modifier: Modifier = Modifier) {
         progress = preloaderProgress,
         modifier = modifier.height(400.dp)
     )
-}
-
-@Preview(name = "Welcome", showBackground = true, showSystemUi = true)
-@Composable
-private fun PreviewWelcome() {
-    AppTheme {
-        WelcomeScreen(navigateToLogin = {})
-    }
 }

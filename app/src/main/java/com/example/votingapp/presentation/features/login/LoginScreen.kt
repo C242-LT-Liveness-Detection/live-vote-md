@@ -21,7 +21,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,21 +28,18 @@ import androidx.navigation.NavController
 import com.example.votingapp.R
 import com.example.votingapp.core.navigation.navigateToHome
 import com.example.votingapp.core.navigation.navigateToRegister
-import com.example.votingapp.core.ui.AppTheme
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.InputPassword
 import com.example.votingapp.presentation.components.InputTextField
 
 @Composable
 internal fun LoginRoute(
-    modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val errorMessages = viewModel.errorMessages.value
     val registerUiInfo = viewModel.loginUiInfo.collectAsStateWithLifecycle().value
     LoginScreen(
-        modifier,
         registerUiInfo,
         errorMessages,
         viewModel::login,
@@ -60,7 +56,6 @@ internal fun LoginRoute(
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier,
     loginUiInfo: LoginUiInfo,
     errorMessages: String? = null,
     login: () -> Unit = {},
@@ -137,7 +132,7 @@ fun RegisterText(onRegisterClick: () -> Unit) {
         withLink(
             link = LinkAnnotation.Clickable(
                 tag = "register",
-                linkInteractionListener = { offset ->
+                linkInteractionListener = { _ ->
                     onRegisterClick()
                 },
                 styles = TextLinkStyles(

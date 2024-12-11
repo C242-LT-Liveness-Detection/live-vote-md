@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.votingapp.core.navigation.navigateToChoseVote
 import com.example.votingapp.core.navigation.navigateToLiveness
 import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.DialogMessage
@@ -44,10 +42,8 @@ fun JoinVotingRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun JoinVotingScreen(
-    modifier: Modifier = Modifier,
     onEvent: (JoinVoteEvent) -> Unit,
     code: String,
     errorMessage: String? = null,

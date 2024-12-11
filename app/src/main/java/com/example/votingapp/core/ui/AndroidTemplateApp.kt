@@ -50,7 +50,6 @@ fun AndroidTemplateApp(
         AppNavHost(
             startDestination = startDestination,
             navController = appState.navController,
-            onBackClick = appState::onBackClick,
             modifier = Modifier
                 .padding(padding)
 

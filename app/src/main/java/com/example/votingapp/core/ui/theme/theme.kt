@@ -1,27 +1,10 @@
-package com.example.votingapp.core.ui
+package com.example.votingapp.core.ui.theme
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.example.votingapp.core.ui.theme.AppTypography
-import com.example.votingapp.core.ui.theme.Blue10
-import com.example.votingapp.core.ui.theme.Blue40
-import com.example.votingapp.core.ui.theme.Blue90
-import com.example.votingapp.core.ui.theme.DarkPurpleGray10
-import com.example.votingapp.core.ui.theme.Orange10
-import com.example.votingapp.core.ui.theme.Orange40
-import com.example.votingapp.core.ui.theme.Orange90
-import com.example.votingapp.core.ui.theme.Purple10
-import com.example.votingapp.core.ui.theme.Purple90
-import com.example.votingapp.core.ui.theme.PurpleGray30
-import com.example.votingapp.core.ui.theme.PurpleGray50
-import com.example.votingapp.core.ui.theme.PurpleGray90
-import com.example.votingapp.core.ui.theme.Red10
-import com.example.votingapp.core.ui.theme.Red40
-import com.example.votingapp.core.ui.theme.Red90
 
 /**
  * Light default theme color scheme
@@ -56,14 +39,8 @@ val LightColors = lightColorScheme(
 
 @Composable
 fun AppTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
-//    val colors = if (!useDarkTheme) {
-//        LightColors
-//    } else {
-//        DarkColors
-//    }
 
 
     MaterialTheme(

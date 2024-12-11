@@ -47,7 +47,6 @@ import com.example.votingapp.core.domain.models.VoteModel
 import com.example.votingapp.core.navigation.loginNavigationRoute
 import com.example.votingapp.core.navigation.navigateToCreateVote
 import com.example.votingapp.core.navigation.navigateToJoinVote
-import com.example.votingapp.core.navigation.navigateToLogin
 import com.example.votingapp.presentation.components.RecentVotingItem
 
 @Composable
@@ -56,7 +55,6 @@ internal fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val listVote = viewModel.listVotes.collectAsState().value
-    val errorMessage = viewModel.errorMessage.collectAsState().value
     val isLoading = viewModel.isLoading.collectAsState().value
     LaunchedEffect(key1 = Unit) {
         viewModel.getVotes()
@@ -64,8 +62,7 @@ internal fun HomeRoute(
 
     HomeScreen(
         listVote = listVote,
-        userName = viewModel.userName.collectAsState().value,
-        errorMessage = errorMessage,
+
         isLoading = isLoading,
         viewModel = viewModel,
         navController = navController
@@ -75,8 +72,7 @@ internal fun HomeRoute(
 @Composable
 fun HomeScreen(
     listVote: List<VoteModel>,
-    userName: String,
-    errorMessage: String,
+
     isLoading: Boolean,
     viewModel: HomeViewModel,
     navController: NavController,
@@ -88,7 +84,7 @@ fun HomeScreen(
 
     LazyColumn {
         item {
-            ConstraintLayout() {
+            ConstraintLayout {
                 val (topImg) = createRefs()
 
                 Box(

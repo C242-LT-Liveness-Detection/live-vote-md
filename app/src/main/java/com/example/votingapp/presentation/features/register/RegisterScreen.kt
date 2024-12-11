@@ -21,26 +21,22 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
-import com.example.votingapp.presentation.components.AppButton
-import com.example.votingapp.presentation.components.InputTextField
 import androidx.compose.ui.text.withLink
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.votingapp.R
-import com.example.votingapp.core.ui.AppTheme
+import com.example.votingapp.presentation.components.AppButton
 import com.example.votingapp.presentation.components.InputPassword
+import com.example.votingapp.presentation.components.InputTextField
 
 @Composable
 internal fun RegisterRoute(
-    modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val errorMessages = viewModel.errorMessages.value
     val registerUiInfo = viewModel.registerUiInfo.collectAsStateWithLifecycle().value
     RegisterScreen(
-        modifier,
         registerUiInfo,
         errorMessages,
         viewModel::register,
@@ -57,7 +53,6 @@ internal fun RegisterRoute(
 
 @Composable
 fun RegisterScreen(
-    modifier: Modifier = Modifier,
     registerUiInfo: RegisterUiInfo,
     errorMessages: String? = null,
     register: () -> Unit = {},
@@ -138,7 +133,7 @@ fun LoginText(onRegisterClick: () -> Unit) {
         withLink(
             link = LinkAnnotation.Clickable(
                 tag = "login",
-                linkInteractionListener = { offset ->
+                linkInteractionListener = { _ ->
                     onRegisterClick()
                 },
                 styles = TextLinkStyles(
@@ -157,17 +152,3 @@ fun LoginText(onRegisterClick: () -> Unit) {
 
 }
 
-
-@Preview(showSystemUi = true)
-@Composable
-fun RegisterScreenPreview() {
-    AppTheme {
-        RegisterScreen(
-            registerUiInfo = RegisterUiInfo(
-                email = "",
-                password = "",
-                name = ""
-            ),
-        )
-    }
-}

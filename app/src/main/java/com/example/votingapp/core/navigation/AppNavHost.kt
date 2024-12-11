@@ -13,7 +13,6 @@ import androidx.navigation.compose.NavHost
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     startDestination: String = homeNavigationRoute
 ) {

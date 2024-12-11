@@ -2,13 +2,11 @@ package com.example.votingapp.core.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.SystemClock
 import android.util.Log
 import android.view.Surface
 import androidx.camera.core.ImageProxy
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.common.ops.CastOp
-import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
@@ -18,9 +16,9 @@ import org.tensorflow.lite.task.vision.classifier.Classifications
 import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 
 class ImageClassifierHelper(
-    var threshold: Float = 0.1f,
-    var maxResults: Int = 3,
-    val modelName: String = "LivenessDetectionCLASSONLY_metadata.tflite",
+    private var threshold: Float = 0.1f,
+    private var maxResults: Int = 3,
+    private val modelName: String = "LivenessDetectionCLASSONLY_metadata.tflite",
     val context: Context,
     val classifierListener: ClassifierListener?
 ) {
@@ -28,7 +26,6 @@ class ImageClassifierHelper(
         fun onError(error: String)
         fun onResults(
             results: List<Classifications>?,
-            inferenceTime: Long
         )
     }
 
@@ -74,14 +71,12 @@ class ImageClassifierHelper(
             .setOrientation(getOrientationFromRotation(image.imageInfo.rotationDegrees))
             .build()
 
-        var inferenceTime = SystemClock.uptimeMillis()
         val results = imageClassifier?.classify(tensorImage, imageProcessingOptions)
         Log.d(TAG, "Results: $results")
-        inferenceTime = SystemClock.uptimeMillis() - inferenceTime
         classifierListener?.onResults(
             results,
-            inferenceTime
-        )
+
+            )
     }
 
     private fun toBitmap(image: ImageProxy): Bitmap {

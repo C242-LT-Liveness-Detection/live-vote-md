@@ -41,7 +41,7 @@ class LivenessViewModel : ViewModel() {
                 }
 
                 @RequiresApi(Build.VERSION_CODES.S)
-                override fun onResults(results: List<Classifications>?, inferenceTime: Long) {
+                override fun onResults(results: List<Classifications>?) {
                     processResults(results)
                 }
             }

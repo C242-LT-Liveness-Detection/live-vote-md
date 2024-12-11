@@ -5,27 +5,27 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.votingapp.R
-import com.example.votingapp.core.ui.AppTheme
+import com.example.votingapp.core.ui.theme.AppTheme
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputTextField(
     modifier: Modifier = Modifier,
     text: String,
-    searchQuery: () -> Unit = {},
     label: String = stringResource(R.string.label),
     icon: ImageVector = Icons.Default.Email,
     keyboardType: KeyboardType = KeyboardType.Text,
