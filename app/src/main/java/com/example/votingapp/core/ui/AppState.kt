@@ -1,25 +1,12 @@
 package com.example.votingapp.core.ui
 
-import android.content.res.Resources
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
-import com.example.votingapp.core.navigation.Destination
-import com.example.votingapp.core.navigation.navigateToChoseVote
-import com.example.votingapp.core.navigation.navigateToCreateVote
-import com.example.votingapp.core.navigation.navigateToHome
-import com.example.votingapp.core.navigation.navigateToJoinVote
-import com.example.votingapp.core.navigation.navigateToLiveness
-import com.example.votingapp.core.navigation.navigateToLogin
-import com.example.votingapp.core.navigation.navigateToRegister
-import com.example.votingapp.core.navigation.navigateToWelcome
 import kotlinx.coroutines.CoroutineScope
 
 

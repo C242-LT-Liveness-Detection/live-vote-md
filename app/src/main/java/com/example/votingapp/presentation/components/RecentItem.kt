@@ -1,5 +1,6 @@
 package com.example.votingapp.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +20,8 @@ import com.example.votingapp.core.domain.models.VoteModel
 
 @Composable
 fun RecentVotingItem(
-    vote: VoteModel
+    vote: VoteModel,
+    onVoteClick: (VoteModel) -> Unit
 ) {
 
     Card(
@@ -30,7 +32,10 @@ fun RecentVotingItem(
                 elevation = 1.dp,
                 shape = MaterialTheme.shapes.medium
 
-            ),
+            )
+            .clickable {
+                onVoteClick(vote)
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )

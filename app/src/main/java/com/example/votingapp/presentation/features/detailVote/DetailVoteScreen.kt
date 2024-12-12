@@ -1,8 +1,8 @@
 package com.example.votingapp.presentation.features.detailVote
 
-import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,13 +21,23 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import ir.ehsannarmani.compose_charts.PieChart
+import ir.ehsannarmani.compose_charts.models.Pie
 
 @Composable
 fun DetailVotingRoute(
@@ -56,6 +66,16 @@ fun DetailVotingScreen(
     errorMessage: String?,
     onBack: () -> Unit
 ) {
+    var data by remember {
+        mutableStateOf(
+            listOf(
+                Pie(label = "Android", data = 20.0, color = Color.Red, selectedColor = Color.Green),
+                Pie(label = "Windows", data = 45.0, color = Color.Cyan, selectedColor = Color.Blue),
+                Pie(label = "Linux", data = 35.0, color = Color.Gray, selectedColor = Color.Yellow),
+            )
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -70,6 +90,7 @@ fun DetailVotingScreen(
                     CircularProgressIndicator(modifier = Modifier.size(56.dp))
                 }
             }
+
             errorMessage != null -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -83,6 +104,7 @@ fun DetailVotingScreen(
                     )
                 }
             }
+
             vote != null -> {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -95,19 +117,38 @@ fun DetailVotingScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = vote.title,
+                                text = vote.question,
                                 style = MaterialTheme.typography.headlineSmall,
                                 color = MaterialTheme.colorScheme.primary
                             )
 
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = vote.question,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(bottom = 16.dp)
+                            Spacer(modifier = Modifier.height(16.dp))
 
-                        )
+//                            PieChart(
+//                                modifier = Modifier.size(200.dp),
+//
+//                                data = data,
+//                                onPieClick = {
+//                                    println("${it.label} Clicked")
+//                                    val pieIndex = data.indexOf(it)
+//                                    data =
+//                                        data.mapIndexed { mapIndex, pie -> pie.copy(selected = pieIndex == mapIndex) }
+//                                },
+//                                selectedScale = 1.2f,
+//                                scaleAnimEnterSpec = spring<Float>(
+//                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+//                                    stiffness = Spring.StiffnessLow
+//                                ),
+//                                colorAnimEnterSpec = tween(300),
+//                                colorAnimExitSpec = tween(300),
+//                                scaleAnimExitSpec = tween(300),
+//                                spaceDegreeAnimExitSpec = tween(300),
+//                                style = Pie.Style.Fill
+//                            )
+
+
+                        }
+
                     }
 
                     items(vote.options) { option ->
@@ -117,11 +158,11 @@ fun DetailVotingScreen(
                         )
                     }
 
-                    item{
-                        Column (
+                    item {
+                        Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.End
-                        ){
+                        ) {
                             Text(
                                 text = vote.endDate,
                                 style = MaterialTheme.typography.bodySmall,

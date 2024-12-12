@@ -113,4 +113,6 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
 
+    implementation(libs.compose.charts)
+
 }

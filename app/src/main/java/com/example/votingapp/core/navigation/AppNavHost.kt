@@ -1,9 +1,7 @@
 package com.example.votingapp.core.navigation
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -49,6 +47,10 @@ fun AppNavHost(
         )
 
         livenessScreen(
+            navController = navController
+        )
+
+        detailVoteScreen(
             navController = navController
         )
     }

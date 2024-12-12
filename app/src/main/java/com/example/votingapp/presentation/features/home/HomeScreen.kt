@@ -22,9 +22,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -44,10 +47,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.votingapp.R
 import com.example.votingapp.core.domain.models.VoteModel
+import com.example.votingapp.core.navigation.detailVoteNavigationRoute
 import com.example.votingapp.core.navigation.loginNavigationRoute
 import com.example.votingapp.core.navigation.navigateToCreateVote
 import com.example.votingapp.core.navigation.navigateToJoinVote
+import com.example.votingapp.presentation.components.PullToRefreshBox
 import com.example.votingapp.presentation.components.RecentVotingItem
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 internal fun HomeRoute(
@@ -69,6 +75,7 @@ internal fun HomeRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     listVote: List<VoteModel>,
@@ -80,51 +87,61 @@ fun HomeScreen(
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
     val dialogConfirmLogout = remember { mutableStateOf(false) }
 
+    val state = rememberPullToRefreshState()
+    val isRefreshing = remember { mutableStateOf(false) }
 
+    PullToRefreshBox(
+        isRefreshing = isRefreshing.value,
+        onRefresh = {
+            isRefreshing.value = true
+            viewModel.getVotes()
+            isRefreshing.value = false
+        },
+        state = state
+    ) {
+        LazyColumn {
+            item {
+                ConstraintLayout {
+                    val (topImg) = createRefs()
 
-    LazyColumn {
-        item {
-            ConstraintLayout {
-                val (topImg) = createRefs()
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .constrainAs(topImg) {
+                                top.linkTo(parent.top)
+                                start.linkTo(parent.start)
 
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .constrainAs(topImg) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
+                            }
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xff38bdf8),
+                                        Color(0xff3b82f6)
 
-                        }
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xff38bdf8),
-                                    Color(0xff3b82f6)
-
+                                    ),
+                                    start = Offset(0f, 0f),
+                                    end = Offset(1000f, 1000f)
                                 ),
-                                start = Offset(0f, 0f),
-                                end = Offset(1000f, 1000f)
-                            ),
-                            shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
-                        )
-                )
+                                shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
+                            )
+                    )
 
-                Box(
-                    Modifier
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
+                    Box(
+                        Modifier
                     ) {
-                        Row(
+                        Column(
                             modifier = Modifier
-                                .height(100.dp)
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                                .fillMaxSize()
                         ) {
+                            Row(
+                                modifier = Modifier
+                                    .height(100.dp)
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                            ) {
 //                            Text(
 //                                text = "Hello, Mardi",
 //                                style = MaterialTheme.typography.headlineSmall,
@@ -132,124 +149,128 @@ fun HomeScreen(
 //
 //                                )
 
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .wrapContentSize(Alignment.CenterEnd)
-                            ) {
-                                Card(
+                                Box(
                                     modifier = Modifier
-                                        .size(48.dp)
-                                        .clickable { setShowDialog(true) },
-                                    shape = CircleShape,
+                                        .fillMaxSize()
+                                        .wrapContentSize(Alignment.CenterEnd)
                                 ) {
-                                    Image(
-                                        painter = painterResource(R.drawable.avatar),
-                                        contentDescription = "User Avatar",
-                                        contentScale = ContentScale.Crop,
-                                    )
-                                }
-
-                                DropdownMenu(
-                                    expanded = showDialog,
-                                    onDismissRequest = {
-                                        setShowDialog(false)
-                                    },
-
-
+                                    Card(
+                                        modifier = Modifier
+                                            .size(48.dp)
+                                            .clickable { setShowDialog(true) },
+                                        shape = CircleShape,
                                     ) {
+                                        Image(
+                                            painter = painterResource(R.drawable.avatar),
+                                            contentDescription = "User Avatar",
+                                            contentScale = ContentScale.Crop,
+                                        )
+                                    }
+
+                                    DropdownMenu(
+                                        expanded = showDialog,
+                                        onDismissRequest = {
+                                            setShowDialog(false)
+                                        },
+
+
+                                        ) {
 //                                    DropdownMenuItem(
 //                                        onClick = {},
 //                                        text = { Text("Pengaturan") }
 //                                    )
-                                    DropdownMenuItem(
-                                        onClick = {
-                                            dialogConfirmLogout.value = true
+                                        DropdownMenuItem(
+                                            onClick = {
+                                                dialogConfirmLogout.value = true
 
-                                        },
-                                        text = { Text("Keluar") }
-                                    )
+                                            },
+                                            text = { Text("Keluar") }
+                                        )
 
+                                    }
                                 }
+
+
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceAround,
+                            ) {
+                                CardFeature(
+                                    onClick = { navController.navigateToCreateVote() },
+                                    text = "Create Voting",
+                                    icon = R.drawable.checklist
+                                )
+
+                                CardFeature(
+                                    onClick = { navController.navigateToJoinVote() },
+                                    text = "Join Voting",
+                                    icon = R.drawable.vote
+                                )
                             }
 
+                            Spacer(modifier = Modifier.height(16.dp))
 
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceAround,
-                        ) {
-                            CardFeature(
-                                onClick = { navController.navigateToCreateVote() },
-                                text = "Create Voting",
-                                icon = R.drawable.checklist
-                            )
-
-                            CardFeature(
-                                onClick = { navController.navigateToJoinVote() },
-                                text = "Join Voting",
-                                icon = R.drawable.vote
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            Text(
-                                "Voting saya",
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                            ) {
+                                Text(
+                                    "Voting saya",
+                                    style = MaterialTheme.typography.titleMedium,
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
 //                            Text(
 //                                "See All",
 //                                color = MaterialTheme.colorScheme.primary,
 //                            )
+                            }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+
                         }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-
                     }
+
                 }
 
             }
 
-        }
-
-        if (isLoading) {
-            item {
-                CircularProgressIndicator(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                        .wrapContentSize(Alignment.Center)
-                )
-            }
-        } else {
-            if (listVote.isEmpty()) {
+            if (isLoading) {
                 item {
-                    Text(
-                        text = "No Voting Available",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(16.dp)
+                    CircularProgressIndicator(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                            .wrapContentSize(Alignment.Center)
                     )
                 }
             } else {
-                items(listVote.size) { index ->
-                    RecentVotingItem(
-                        vote = listVote[index],
+                if (listVote.isEmpty()) {
+                    item {
+                        Text(
+                            text = "No Voting Available",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                } else {
+                    items(listVote.size) { index ->
+                        RecentVotingItem(
+                            vote = listVote[index],
+                            onVoteClick = {
+                                navController.navigate("$detailVoteNavigationRoute/${it.code}")
+                            }
 
                         )
-                    Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
+                    }
                 }
             }
         }
