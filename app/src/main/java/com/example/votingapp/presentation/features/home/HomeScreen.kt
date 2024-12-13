@@ -286,7 +286,7 @@ fun HomeScreen(
                 dialogConfirmLogout.value = false
                 viewModel.logout()
                 navController.navigate(loginNavigationRoute) {
-                    popUpTo(loginNavigationRoute) {
+                    popUpTo(0) {
                         inclusive = true
                     }
                 }
