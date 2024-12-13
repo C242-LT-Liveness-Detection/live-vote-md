@@ -7,6 +7,7 @@ import com.example.votingapp.data.resource.remote.response.success.CreateVoteRes
 import com.example.votingapp.data.resource.remote.response.success.JoinVoteResponse
 import com.example.votingapp.data.resource.remote.response.success.ListVoteResponseItem
 import com.example.votingapp.data.resource.remote.response.success.VoteByCodeResponse
+import com.example.votingapp.data.resource.remote.response.success.VoteResultResponse
 import com.example.votingapp.data.resource.remote.retrofit.ApiService
 import com.example.votingapp.data.storage.UserPreferenceStore
 import javax.inject.Inject
@@ -48,6 +49,13 @@ class VoteRepository @Inject constructor(
 
     suspend fun getVoteByCode(code: String): VoteByCodeResponse {
         return apiService.getVoteByCode(code)
+    }
+
+    suspend fun voteResult(code: String): VoteResultResponse {
+        val request = JoinVoteRequest(
+            code = code
+        )
+        return apiService.voteResult(request)
     }
 
     suspend fun submitVote(code: String, selectedOption: List<Int>) {

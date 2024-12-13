@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.votingapp.data.repositories.VoteRepository
 import com.example.votingapp.data.resource.remote.response.success.OptionsItem
+import com.example.votingapp.data.resource.remote.response.success.ResultsItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -23,14 +24,12 @@ class DetailVotingViewModel @Inject constructor(
         isLoading.value = true
         viewModelScope.launch {
             try {
-                val response = voteRepository.getVoteByCode(uniqueCode)
+                val response = voteRepository.voteResult(uniqueCode)
                 votingDetail.value = VoteDetail(
-                    title = response.title,
-                    code = response.uniqueCode,
-                    question = response.question,
-                    createdDate = response.createdDate,
-                    endDate = response.endDate,
-                    options = response.options,
+                    title = response.eventTitle,
+                    code = uniqueCode,
+                    question = response.eventQuestion,
+                    options = response.results,
                 )
             } catch (e: HttpException) {
                 errorMessage.value = when (e.code()) {
@@ -52,7 +51,5 @@ data class VoteDetail(
     val title: String,
     val code: String,
     val question: String,
-    val createdDate: String,
-    val endDate: String,
-    val options: List<OptionsItem>,
+    val options: List<ResultsItem>,
 )

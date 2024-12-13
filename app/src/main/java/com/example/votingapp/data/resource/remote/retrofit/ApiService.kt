@@ -11,6 +11,7 @@ import com.example.votingapp.data.resource.remote.response.success.ListVoteRespo
 import com.example.votingapp.data.resource.remote.response.success.LoginResponse
 import com.example.votingapp.data.resource.remote.response.success.RegisterResponse
 import com.example.votingapp.data.resource.remote.response.success.VoteByCodeResponse
+import com.example.votingapp.data.resource.remote.response.success.VoteResultResponse
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -60,4 +61,9 @@ interface ApiService {
     suspend fun submitVote(
         @Body body: SubmitVoteRequest
     )
+
+    @POST("events/result")
+    suspend fun voteResult(
+        @Body body: JoinVoteRequest
+    ): VoteResultResponse
 }

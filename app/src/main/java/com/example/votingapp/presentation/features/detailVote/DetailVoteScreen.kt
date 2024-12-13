@@ -1,8 +1,8 @@
 package com.example.votingapp.presentation.features.detailVote
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
+import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,28 +16,30 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import ir.ehsannarmani.compose_charts.PieChart
-import ir.ehsannarmani.compose_charts.models.Pie
 
 @Composable
 fun DetailVotingRoute(
@@ -66,25 +68,26 @@ fun DetailVotingScreen(
     errorMessage: String?,
     onBack: () -> Unit
 ) {
-    var data by remember {
-        mutableStateOf(
-            listOf(
-                Pie(label = "Android", data = 20.0, color = Color.Red, selectedColor = Color.Green),
-                Pie(label = "Windows", data = 45.0, color = Color.Cyan, selectedColor = Color.Blue),
-                Pie(label = "Linux", data = 35.0, color = Color.Gray, selectedColor = Color.Yellow),
-            )
-        )
-    }
+    val localClipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
 
-    Box(
+    ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        // Create references for the LazyColumn and Box
+        val (content, footer) = createRefs()
+
         when {
             isLoading -> {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .constrainAs(content) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(modifier = Modifier.size(56.dp))
@@ -93,7 +96,12 @@ fun DetailVotingScreen(
 
             errorMessage != null -> {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .constrainAs(content) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -108,10 +116,14 @@ fun DetailVotingScreen(
             vote != null -> {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .constrainAs(content) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(footer.top)
+                        }
                 ) {
                     item {
-
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -121,57 +133,69 @@ fun DetailVotingScreen(
                                 style = MaterialTheme.typography.headlineSmall,
                                 color = MaterialTheme.colorScheme.primary
                             )
-
                             Spacer(modifier = Modifier.height(16.dp))
-
-//                            PieChart(
-//                                modifier = Modifier.size(200.dp),
-//
-//                                data = data,
-//                                onPieClick = {
-//                                    println("${it.label} Clicked")
-//                                    val pieIndex = data.indexOf(it)
-//                                    data =
-//                                        data.mapIndexed { mapIndex, pie -> pie.copy(selected = pieIndex == mapIndex) }
-//                                },
-//                                selectedScale = 1.2f,
-//                                scaleAnimEnterSpec = spring<Float>(
-//                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-//                                    stiffness = Spring.StiffnessLow
-//                                ),
-//                                colorAnimEnterSpec = tween(300),
-//                                colorAnimExitSpec = tween(300),
-//                                scaleAnimExitSpec = tween(300),
-//                                spaceDegreeAnimExitSpec = tween(300),
-//                                style = Pie.Style.Fill
-//                            )
-
-
                         }
-
                     }
 
-                    items(vote.options) { option ->
+                    items(vote.options.size) { option ->
                         OptionCard(
-                            optionText = option.optionText,
-                            voteCount = 0
+                            optionText = vote.options[option].option,
+                            voteCount = vote.options[option].votes
                         )
                     }
 
-                    item {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.End
+                   
+                }
+
+                Box(
+                    Modifier
+                        .background(Color.White)
+                        .constrainAs(footer) {
+                            bottom.linkTo(parent.bottom)
+                        }
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+
+                            .border(
+                                1.dp,
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.shapes.small
+                            )
+
+                    ) {
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = vote.endDate,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.secondary
+                                vote.code,
+                                style = MaterialTheme.typography.bodyMedium,
                             )
+
+                            IconButton(
+                                onClick = {
+                                    localClipboardManager.setText(AnnotatedString(vote.code))
+                                    Toast.makeText(
+                                        context,
+                                        "Code Vote berhasil disalin",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                },
+                            ) {
+                                Icon(
+                                    Icons.Filled.ContentCopy,
+                                    contentDescription = "Copy Code Vote",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            }
                         }
                     }
-
-
                 }
             }
         }
